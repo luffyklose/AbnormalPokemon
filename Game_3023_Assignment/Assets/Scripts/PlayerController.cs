@@ -10,24 +10,19 @@ public class PlayerController : MonoBehaviour
     private bool b_isMoving;
 
     public Rigidbody2D m_rigidbody;
+    public Animator m_animator;
     
     // Start is called before the first frame update
     void Start()
     {
         m_rigidbody = GetComponent<Rigidbody2D>();
+        m_animator = GetComponent<Animator>();
     }
 
     // Update is called once per frame
     void Update()
     {
-        if (m_rigidbody.velocity.magnitude > Double.Epsilon)
-        {
-            b_isMoving = true;
-        }
-        else
-        {
-            b_isMoving = false;
-        }
+        
         
         //实现只允许横向或纵向移动的废弃代码
         /*if (b_isMoving)
@@ -59,8 +54,24 @@ public class PlayerController : MonoBehaviour
             }
             //m_rigidbody.velocity = m_rigidbody.velocity.normalized * m_moveSpeed;
         }*/
+        
+        //Basic Movement Scripts
         m_rigidbody.velocity = new Vector2(Input.GetAxisRaw("Horizontal"), Input.GetAxisRaw("Vertical"));
         m_rigidbody.velocity = m_rigidbody.velocity.normalized * m_moveSpeed;
-        
+        if (m_rigidbody.velocity.magnitude > Double.Epsilon)
+        {
+            b_isMoving = true;
+            m_animator.SetBool("isMoving",b_isMoving);
+        }
+        else
+        {
+            b_isMoving = false;
+            m_animator.SetBool("isMoving",b_isMoving);
+        }
+
+        m_animator.SetFloat("moveX", m_rigidbody.velocity.x);
+        m_animator.SetFloat("moveY", m_rigidbody.velocity.y);
+        Debug.Log(m_animator.GetFloat("moveX") + " " + m_animator.GetFloat("moveY"));
+
     }
 }
