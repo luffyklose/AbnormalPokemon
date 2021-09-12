@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Random = System.Random;
 
 public class PlayerController : MonoBehaviour
 {
@@ -11,6 +12,7 @@ public class PlayerController : MonoBehaviour
 
     public Rigidbody2D m_rigidbody;
     public Animator m_animator;
+    public LayerMask EncounterArea;
     
     // Start is called before the first frame update
     void Start()
@@ -58,20 +60,34 @@ public class PlayerController : MonoBehaviour
         //Basic Movement Scripts
         m_rigidbody.velocity = new Vector2(Input.GetAxisRaw("Horizontal"), Input.GetAxisRaw("Vertical"));
         m_rigidbody.velocity = m_rigidbody.velocity.normalized * m_moveSpeed;
+        
         if (m_rigidbody.velocity.magnitude > Double.Epsilon)
         {
             b_isMoving = true;
-            m_animator.SetBool("isMoving",b_isMoving);
+            m_animator.SetFloat("moveX", m_rigidbody.velocity.x);
+            m_animator.SetFloat("moveY", m_rigidbody.velocity.y);
+            
+            CheckEncounterBattle();
         }
         else
         {
             b_isMoving = false;
-            m_animator.SetBool("isMoving",b_isMoving);
         }
+        
+        m_animator.SetBool("isMoving",b_isMoving);
+        //Debug.Log(m_animator.GetFloat("moveX") + " " + m_animator.GetFloat("moveY"));
+        
+        
+    }
 
-        m_animator.SetFloat("moveX", m_rigidbody.velocity.x);
-        m_animator.SetFloat("moveY", m_rigidbody.velocity.y);
-        Debug.Log(m_animator.GetFloat("moveX") + " " + m_animator.GetFloat("moveY"));
-
+    private void CheckEncounterBattle()
+    {
+        if (Physics2D.OverlapBox(transform.position, transform.localScale / 2, 0.0f, EncounterArea))
+        {
+            if (UnityEngine.Random.Range(1, 101) > 10) 
+            {
+                Debug.Log("Encounter Enemy!");
+            }
+        }
     }
 }

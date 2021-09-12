@@ -11,8 +11,8 @@ TagManager:
   - 
   - Water
   - UI
-  - 
-  - 
+  - EncounterArea
+  - SolidObjects
   - 
   - 
   - 
@@ -43,6 +43,12 @@ TagManager:
     locked: 0
   - name: Background
     uniqueID: 1635163581
+    locked: 0
+  - name: SolidObjects
+    uniqueID: 1200299817
+    locked: 0
+  - name: EncounterArea
+    uniqueID: 3570420979
     locked: 0
   - name: Player
     uniqueID: 332347841
