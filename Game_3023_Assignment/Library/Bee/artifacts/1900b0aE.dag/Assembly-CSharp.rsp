@@ -342,8 +342,16 @@
 -r:"Library/Bee/artifacts/1900b0aE.dag/UnityEditor.UI.ref.dll"
 -r:"Library/Bee/artifacts/1900b0aE.dag/UnityEngine.UI.ref.dll"
 -r:"Library/Bee/artifacts/1900b0aE.dag/VSSettingsProvider.ref.dll"
-"Assets/Scripts/CameraController.cs"
-"Assets/Scripts/PlayerController.cs"
+"Assets/Scripts/Class/Monster.cs"
+"Assets/Scripts/Class/MonsterBase.cs"
+"Assets/Scripts/Class/Move.cs"
+"Assets/Scripts/Class/MoveBase.cs"
+"Assets/Scripts/Game/BattleSystem.cs"
+"Assets/Scripts/Game/CameraController.cs"
+"Assets/Scripts/Game/PlayerController.cs"
+"Assets/Scripts/UI/BattleHUD.cs"
+"Assets/Scripts/UI/BattleUnit.cs"
+"Assets/Scripts/UI/HPBar.cs"
 -langversion:8.0
 
 /deterministic
