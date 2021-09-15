@@ -351,6 +351,7 @@
 "Assets/Scripts/Game/PlayerController.cs"
 "Assets/Scripts/UI/BattleHUD.cs"
 "Assets/Scripts/UI/BattleUnit.cs"
+"Assets/Scripts/UI/DialogBox.cs"
 "Assets/Scripts/UI/HPBar.cs"
 -langversion:8.0
 

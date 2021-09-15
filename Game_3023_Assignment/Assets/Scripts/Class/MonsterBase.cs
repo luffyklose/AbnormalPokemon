@@ -96,4 +96,18 @@ public enum MonsterType
    Fire,
    Grass,
    Water,
+   Fighting,
+   Flying,
+   Poison,
+   Ground,
+   Rock,
+   Bug,
+   Ghost,
+   Steel,
+   Eletric,
+   Psychic,
+   Ice,
+   Dragon,
+   Fairy,
+   Dark
 }

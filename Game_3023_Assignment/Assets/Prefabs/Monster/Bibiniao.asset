@@ -1,0 +1,27 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ca80ce0551caa7148b094909a6671d32, type: 3}
+  m_Name: Bibiniao
+  m_EditorClassIdentifier: 
+  name: Bibiniao
+  description: good at bibi
+  frontSprite: {fileID: 21300000, guid: c3544fcba9b6a654da8538b686fea377, type: 3}
+  backSprite: {fileID: 21300000, guid: b7ccf5dde61c76b4f92cf22cbdc740ce, type: 3}
+  type1: 6
+  type2: 0
+  maxHP: 40
+  attack: 45
+  defence: 40
+  spAttack: 35
+  spDefence: 35
+  speed: 56
+  learnableMoves: []
