@@ -41,6 +41,7 @@
     <ImplicitlyExpandDesignTimeFacades>false</ImplicitlyExpandDesignTimeFacades>
   </PropertyGroup>
   <ItemGroup>
+     <Compile Include="Assets\Scripts\UI\DialogBox.cs" />
      <Compile Include="Assets\Scripts\Game\PlayerController.cs" />
      <Compile Include="Assets\Scripts\Game\BattleSystem.cs" />
      <Compile Include="Assets\Scripts\Class\MonsterBase.cs" />
@@ -51,7 +52,6 @@
      <Compile Include="Assets\Scripts\Class\MoveBase.cs" />
      <Compile Include="Assets\Scripts\Class\Move.cs" />
      <Compile Include="Assets\Scripts\UI\BattleHUD.cs" />
-     <Compile Include="Assets\Scripts\UI\DialogBox.cs" />
      <Reference Include="UnityEngine">
      <HintPath>E:/Program Files (x86)/2021.1.19f1/Editor/Data/Managed/UnityEngine/UnityEngine.dll</HintPath>
      </Reference>

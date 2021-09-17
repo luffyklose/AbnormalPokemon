@@ -72,7 +72,45 @@ public class BattleSystem : MonoBehaviour
         dialogBox.EnableMoveSelector(true);
     }
 
-   void HandleActionSelection()
+    IEnumerator PerfomPlayerMove()
+    {
+        state = BattleState.PlayerMove;
+        var move = playerUnit.Monster.Moves[currentMove];
+        yield return dialogBox.TypeDialog($"{playerUnit.Monster.Base.Name} used {move.Base.Name}");
+        yield return new WaitForSeconds(1f);
+        bool isdefeated = enemyUnit.Monster.TakeDamage(move, playerUnit.Monster);
+        yield return enemyHUD.UpdateHP();
+        
+        if (isdefeated)
+        {
+            yield return dialogBox.TypeDialog($"{enemyUnit.Monster.Base.Name} is defeated!");
+        }
+        else
+        {
+            StartCoroutine(PerformEnemyMove());
+        }
+    }
+
+    IEnumerator PerformEnemyMove()
+    {
+        state = BattleState.EnemyMove;
+        var move = enemyUnit.Monster.GetRandomMove();
+        yield return dialogBox.TypeDialog($"{enemyUnit.Monster.Base.Name} used {move.Base.Name}");
+        yield return new WaitForSeconds(1f);
+        bool isdefeated = playerUnit.Monster.TakeDamage(move, enemyUnit.Monster);
+        yield return playerHUD.UpdateHP();
+        
+        if (isdefeated)
+        {
+            yield return dialogBox.TypeDialog($"{playerUnit.Monster.Base.Name} is defeated!");
+        }
+        else
+        {
+            PlayerAction();
+        }
+    }
+
+        void HandleActionSelection()
     {
         if (Input.GetKeyDown(KeyCode.DownArrow))
         {
@@ -142,14 +180,9 @@ public class BattleSystem : MonoBehaviour
 
        if (Input.GetKeyDown(KeyCode.Space))
        {
-           if (currentMove == 0)
-           {
-               
-           }
-           else if (currentMove == 1)
-           {
-               
-           }
+           dialogBox.EnableMoveSelector(false);
+           dialogBox.EnableDialogText(true);
+           StartCoroutine(PerfomPlayerMove());
        }
    }
 }
