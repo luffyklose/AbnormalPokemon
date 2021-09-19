@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -22,14 +23,18 @@ public class BattleSystem : MonoBehaviour
     private BattleState state;
     private int currentAction;
     private int currentMove;
+    
+    //return true when enemy is defeated, return flase when player is defeated
+    public event Action<bool> OnBattleOver;
+    
     // Start is called before the first frame update
-    void Start()
+    public void StartBattle()
     {
         StartCoroutine(SetupBattle());
     }
 
     // Update is called once per frame
-    void Update()
+    public void HandleUpdate()
     {
         if (state == BattleState.PlayerAction)
         {
@@ -84,6 +89,9 @@ public class BattleSystem : MonoBehaviour
         if (isdefeated)
         {
             yield return dialogBox.TypeDialog($"{enemyUnit.Monster.Base.Name} is defeated!");
+
+            yield return new WaitForSeconds(2.0f);
+            OnBattleOver(true);
         }
         else
         {
@@ -103,6 +111,9 @@ public class BattleSystem : MonoBehaviour
         if (isdefeated)
         {
             yield return dialogBox.TypeDialog($"{playerUnit.Monster.Base.Name} is defeated!");
+            
+            yield return new WaitForSeconds(2.0f);
+            OnBattleOver(false);
         }
         else
         {

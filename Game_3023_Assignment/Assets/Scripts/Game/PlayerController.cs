@@ -7,12 +7,16 @@ using Random = System.Random;
 public class PlayerController : MonoBehaviour
 {
     [SerializeField] private float m_moveSpeed;
+    [SerializeField] private float checkInterval;
 
     private bool b_isMoving;
+    private float counter;
 
     public Rigidbody2D m_rigidbody;
     public Animator m_animator;
     public LayerMask EncounterArea;
+
+    public event Action onEncountered;
     
     // Start is called before the first frame update
     void Start()
@@ -22,7 +26,7 @@ public class PlayerController : MonoBehaviour
     }
 
     // Update is called once per frame
-    void Update()
+    public void HandleUpdate()
     {
         
         
@@ -66,8 +70,13 @@ public class PlayerController : MonoBehaviour
             b_isMoving = true;
             m_animator.SetFloat("moveX", m_rigidbody.velocity.x);
             m_animator.SetFloat("moveY", m_rigidbody.velocity.y);
-            
-            CheckEncounterBattle();
+
+            counter += Time.deltaTime;
+            if (counter > checkInterval)
+            {
+                CheckEncounterBattle();
+                counter = 0.0f;
+            }
         }
         else
         {
@@ -84,9 +93,16 @@ public class PlayerController : MonoBehaviour
     {
         if (Physics2D.OverlapBox(transform.position, transform.localScale / 2, 0.0f, EncounterArea))
         {
-            if (UnityEngine.Random.Range(1, 101) > 10) 
+            if (UnityEngine.Random.Range(1, 101) < 10)
             {
-                Debug.Log("Encounter Enemy!");
+                //Debug.Log("jinlaile");
+                m_rigidbody.velocity=Vector2.zero;
+                m_animator.SetBool("isMoving",false);
+                onEncountered();
+            }
+            else
+            {
+                //Debug.Log("meijinlai");
             }
         }
     }
