@@ -19,6 +19,7 @@ public class CameraController : MonoBehaviour
     // Update is called once per frame
     void LateUpdate()
     {
+        //If the camera isn't on the same position(x and y axis), it will change position to player's position.
         if (transform.position != targetTransform.position)
         {
             Vector3 targetPosition =

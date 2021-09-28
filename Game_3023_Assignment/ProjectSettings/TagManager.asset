@@ -47,6 +47,9 @@ TagManager:
   - name: SolidObjects
     uniqueID: 1200299817
     locked: 0
+  - name: Road
+    uniqueID: 419175075
+    locked: 0
   - name: EncounterArea
     uniqueID: 3570420979
     locked: 0

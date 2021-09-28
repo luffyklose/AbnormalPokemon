@@ -41,6 +41,7 @@
     <ImplicitlyExpandDesignTimeFacades>false</ImplicitlyExpandDesignTimeFacades>
   </PropertyGroup>
   <ItemGroup>
+     <Compile Include="Assets\Scripts\Game\GameController.cs" />
      <Compile Include="Assets\Scripts\UI\DialogBox.cs" />
      <Compile Include="Assets\Scripts\Game\PlayerController.cs" />
      <Compile Include="Assets\Scripts\Game\BattleSystem.cs" />
@@ -52,7 +53,6 @@
      <Compile Include="Assets\Scripts\Class\MoveBase.cs" />
      <Compile Include="Assets\Scripts\Class\Move.cs" />
      <Compile Include="Assets\Scripts\UI\BattleHUD.cs" />
-     <Compile Include="Assets\Scripts\Game\GameController.cs" />
      <Reference Include="UnityEngine">
      <HintPath>E:/Program Files (x86)/2021.1.19f1/Editor/Data/Managed/UnityEngine/UnityEngine.dll</HintPath>
      </Reference>
@@ -644,9 +644,6 @@
      <Reference Include="Unity.2D.Tilemap.Extras">
      <HintPath>E:/Unity/2021_Fall/Game Engine/GAME_3023_Assignment/Game_3023_Assignment/Library/ScriptAssemblies/Unity.2D.Tilemap.Extras.dll</HintPath>
      </Reference>
-     <Reference Include="Unity.2D.Animation.Editor">
-     <HintPath>E:/Unity/2021_Fall/Game Engine/GAME_3023_Assignment/Game_3023_Assignment/Library/ScriptAssemblies/Unity.2D.Animation.Editor.dll</HintPath>
-     </Reference>
      <Reference Include="Unity.InternalAPIEngineBridge.001">
      <HintPath>E:/Unity/2021_Fall/Game Engine/GAME_3023_Assignment/Game_3023_Assignment/Library/ScriptAssemblies/Unity.InternalAPIEngineBridge.001.dll</HintPath>
      </Reference>
@@ -656,11 +653,20 @@
      <Reference Include="Unity.2D.PixelPerfect">
      <HintPath>E:/Unity/2021_Fall/Game Engine/GAME_3023_Assignment/Game_3023_Assignment/Library/ScriptAssemblies/Unity.2D.PixelPerfect.dll</HintPath>
      </Reference>
-     <Reference Include="Unity.2D.Tilemap.Editor">
-     <HintPath>E:/Unity/2021_Fall/Game Engine/GAME_3023_Assignment/Game_3023_Assignment/Library/ScriptAssemblies/Unity.2D.Tilemap.Editor.dll</HintPath>
+     <Reference Include="Unity.RenderPipelines.Universal.Shaders">
+     <HintPath>E:/Unity/2021_Fall/Game Engine/GAME_3023_Assignment/Game_3023_Assignment/Library/ScriptAssemblies/Unity.RenderPipelines.Universal.Shaders.dll</HintPath>
+     </Reference>
+     <Reference Include="Unity.2D.Animation.Editor">
+     <HintPath>E:/Unity/2021_Fall/Game Engine/GAME_3023_Assignment/Game_3023_Assignment/Library/ScriptAssemblies/Unity.2D.Animation.Editor.dll</HintPath>
+     </Reference>
+     <Reference Include="Unity.RenderPipelines.Universal.Runtime">
+     <HintPath>E:/Unity/2021_Fall/Game Engine/GAME_3023_Assignment/Game_3023_Assignment/Library/ScriptAssemblies/Unity.RenderPipelines.Universal.Runtime.dll</HintPath>
      </Reference>
      <Reference Include="PsdPlugin">
      <HintPath>E:/Unity/2021_Fall/Game Engine/GAME_3023_Assignment/Game_3023_Assignment/Library/ScriptAssemblies/PsdPlugin.dll</HintPath>
+     </Reference>
+     <Reference Include="Unity.2D.Tilemap.Editor">
+     <HintPath>E:/Unity/2021_Fall/Game Engine/GAME_3023_Assignment/Game_3023_Assignment/Library/ScriptAssemblies/Unity.2D.Tilemap.Editor.dll</HintPath>
      </Reference>
      <Reference Include="Unity.TextMeshPro.Editor">
      <HintPath>E:/Unity/2021_Fall/Game Engine/GAME_3023_Assignment/Game_3023_Assignment/Library/ScriptAssemblies/Unity.TextMeshPro.Editor.dll</HintPath>
@@ -679,6 +685,9 @@
      </Reference>
      <Reference Include="Unity.VisualScripting.State.Editor">
      <HintPath>E:/Unity/2021_Fall/Game Engine/GAME_3023_Assignment/Game_3023_Assignment/Library/ScriptAssemblies/Unity.VisualScripting.State.Editor.dll</HintPath>
+     </Reference>
+     <Reference Include="Unity.Searcher.Editor">
+     <HintPath>E:/Unity/2021_Fall/Game Engine/GAME_3023_Assignment/Game_3023_Assignment/Library/ScriptAssemblies/Unity.Searcher.Editor.dll</HintPath>
      </Reference>
      <Reference Include="Unity.2D.IK.Editor">
      <HintPath>E:/Unity/2021_Fall/Game Engine/GAME_3023_Assignment/Game_3023_Assignment/Library/ScriptAssemblies/Unity.2D.IK.Editor.dll</HintPath>
@@ -707,14 +716,20 @@
      <Reference Include="Unity.Rider.Editor">
      <HintPath>E:/Unity/2021_Fall/Game Engine/GAME_3023_Assignment/Game_3023_Assignment/Library/ScriptAssemblies/Unity.Rider.Editor.dll</HintPath>
      </Reference>
-     <Reference Include="Unity.InternalAPIEditorBridge.001">
-     <HintPath>E:/Unity/2021_Fall/Game Engine/GAME_3023_Assignment/Game_3023_Assignment/Library/ScriptAssemblies/Unity.InternalAPIEditorBridge.001.dll</HintPath>
+     <Reference Include="Unity.RenderPipelines.Core.ShaderLibrary">
+     <HintPath>E:/Unity/2021_Fall/Game Engine/GAME_3023_Assignment/Game_3023_Assignment/Library/ScriptAssemblies/Unity.RenderPipelines.Core.ShaderLibrary.dll</HintPath>
      </Reference>
      <Reference Include="UnityEngine.UI">
      <HintPath>E:/Unity/2021_Fall/Game Engine/GAME_3023_Assignment/Game_3023_Assignment/Library/ScriptAssemblies/UnityEngine.UI.dll</HintPath>
      </Reference>
      <Reference Include="Unity.2D.Tilemap.Extras.Editor">
      <HintPath>E:/Unity/2021_Fall/Game Engine/GAME_3023_Assignment/Game_3023_Assignment/Library/ScriptAssemblies/Unity.2D.Tilemap.Extras.Editor.dll</HintPath>
+     </Reference>
+     <Reference Include="Unity.InternalAPIEditorBridge.001">
+     <HintPath>E:/Unity/2021_Fall/Game Engine/GAME_3023_Assignment/Game_3023_Assignment/Library/ScriptAssemblies/Unity.InternalAPIEditorBridge.001.dll</HintPath>
+     </Reference>
+     <Reference Include="Unity.RenderPipelines.Core.Runtime">
+     <HintPath>E:/Unity/2021_Fall/Game Engine/GAME_3023_Assignment/Game_3023_Assignment/Library/ScriptAssemblies/Unity.RenderPipelines.Core.Runtime.dll</HintPath>
      </Reference>
      <Reference Include="Unity.VisualScripting.Core">
      <HintPath>E:/Unity/2021_Fall/Game Engine/GAME_3023_Assignment/Game_3023_Assignment/Library/ScriptAssemblies/Unity.VisualScripting.Core.dll</HintPath>
@@ -725,6 +740,12 @@
      <Reference Include="Unity.2D.IK.Runtime">
      <HintPath>E:/Unity/2021_Fall/Game Engine/GAME_3023_Assignment/Game_3023_Assignment/Library/ScriptAssemblies/Unity.2D.IK.Runtime.dll</HintPath>
      </Reference>
+     <Reference Include="Unity.ShaderGraph.Editor">
+     <HintPath>E:/Unity/2021_Fall/Game Engine/GAME_3023_Assignment/Game_3023_Assignment/Library/ScriptAssemblies/Unity.ShaderGraph.Editor.dll</HintPath>
+     </Reference>
+     <Reference Include="Unity.RenderPipelines.Universal.Editor">
+     <HintPath>E:/Unity/2021_Fall/Game Engine/GAME_3023_Assignment/Game_3023_Assignment/Library/ScriptAssemblies/Unity.RenderPipelines.Universal.Editor.dll</HintPath>
+     </Reference>
      <Reference Include="Unity.2D.Animation.Triangle.Runtime">
      <HintPath>E:/Unity/2021_Fall/Game Engine/GAME_3023_Assignment/Game_3023_Assignment/Library/ScriptAssemblies/Unity.2D.Animation.Triangle.Runtime.dll</HintPath>
      </Reference>
@@ -733,6 +754,12 @@
      </Reference>
      <Reference Include="Unity.2D.PixelPerfect.Editor">
      <HintPath>E:/Unity/2021_Fall/Game Engine/GAME_3023_Assignment/Game_3023_Assignment/Library/ScriptAssemblies/Unity.2D.PixelPerfect.Editor.dll</HintPath>
+     </Reference>
+     <Reference Include="Unity.RenderPipeline.Universal.ShaderLibrary">
+     <HintPath>E:/Unity/2021_Fall/Game Engine/GAME_3023_Assignment/Game_3023_Assignment/Library/ScriptAssemblies/Unity.RenderPipeline.Universal.ShaderLibrary.dll</HintPath>
+     </Reference>
+     <Reference Include="Unity.RenderPipelines.ShaderGraph.ShaderGraphLibrary">
+     <HintPath>E:/Unity/2021_Fall/Game Engine/GAME_3023_Assignment/Game_3023_Assignment/Library/ScriptAssemblies/Unity.RenderPipelines.ShaderGraph.ShaderGraphLibrary.dll</HintPath>
      </Reference>
      <Reference Include="Unity.Timeline.Editor">
      <HintPath>E:/Unity/2021_Fall/Game Engine/GAME_3023_Assignment/Game_3023_Assignment/Library/ScriptAssemblies/Unity.Timeline.Editor.dll</HintPath>
@@ -748,6 +775,9 @@
      </Reference>
      <Reference Include="Unity.2D.Common.Editor">
      <HintPath>E:/Unity/2021_Fall/Game Engine/GAME_3023_Assignment/Game_3023_Assignment/Library/ScriptAssemblies/Unity.2D.Common.Editor.dll</HintPath>
+     </Reference>
+     <Reference Include="Unity.RenderPipelines.Core.Editor">
+     <HintPath>E:/Unity/2021_Fall/Game Engine/GAME_3023_Assignment/Game_3023_Assignment/Library/ScriptAssemblies/Unity.RenderPipelines.Core.Editor.dll</HintPath>
      </Reference>
      <Reference Include="Unity.2D.SpriteShape.Runtime">
      <HintPath>E:/Unity/2021_Fall/Game Engine/GAME_3023_Assignment/Game_3023_Assignment/Library/ScriptAssemblies/Unity.2D.SpriteShape.Runtime.dll</HintPath>
