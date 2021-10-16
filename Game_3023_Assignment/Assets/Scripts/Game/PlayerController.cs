@@ -8,6 +8,7 @@ public class PlayerController : MonoBehaviour
 {
     [SerializeField] private float m_moveSpeed;
     [SerializeField] private float checkInterval;
+    [SerializeField] private float BattleProbablity;
 
     private bool b_isMoving;
     private float counter;
@@ -28,8 +29,6 @@ public class PlayerController : MonoBehaviour
     // Update is called once per frame
     public void HandleUpdate()
     {
-        
-        
         //实现只允许横向或纵向移动的废弃代码
         /*if (b_isMoving)
         {
@@ -93,7 +92,7 @@ public class PlayerController : MonoBehaviour
     {
         if (Physics2D.OverlapBox(transform.position, transform.localScale / 2, 0.0f, EncounterArea))
         {
-            if (UnityEngine.Random.Range(1, 101) < 10)
+            if (UnityEngine.Random.Range(1, 101) < 100 * BattleProbablity)
             {
                 //Debug.Log("jinlaile");
                 m_rigidbody.velocity=Vector2.zero;

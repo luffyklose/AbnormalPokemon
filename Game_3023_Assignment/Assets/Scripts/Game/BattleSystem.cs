@@ -120,8 +120,17 @@ public class BattleSystem : MonoBehaviour
             PlayerAction();
         }
     }
+    
+    IEnumerator Escape()
+    {
+        state = BattleState.Busy;
+        Debug.Log("Paolema");
+        yield return dialogBox.TypeDialog("Run Away!");
+        OnBattleOver(true);
+        Debug.Log("Paole");
+    }
 
-        void HandleActionSelection()
+    void HandleActionSelection()
     {
         if (Input.GetKeyDown(KeyCode.DownArrow))
         {
@@ -158,6 +167,9 @@ public class BattleSystem : MonoBehaviour
             else if (currentAction == 1)
             {
                 //Run
+                //Debug.Log("Paolema");
+                OnBattleOver(true);
+                //Escape();
             }
         }
     }

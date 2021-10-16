@@ -359,9 +359,11 @@
 "Assets/Scripts/Game/BattleSystem.cs"
 "Assets/Scripts/Game/CameraController.cs"
 "Assets/Scripts/Game/GameController.cs"
+"Assets/Scripts/Game/GameMenu.cs"
 "Assets/Scripts/Game/PlayerController.cs"
 "Assets/Scripts/UI/BattleHUD.cs"
 "Assets/Scripts/UI/BattleUnit.cs"
+"Assets/Scripts/UI/Button.cs"
 "Assets/Scripts/UI/DialogBox.cs"
 "Assets/Scripts/UI/HPBar.cs"
 -langversion:8.0
