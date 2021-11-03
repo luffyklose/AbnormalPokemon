@@ -82,7 +82,9 @@ public class BattleSystem : MonoBehaviour
         state = BattleState.PlayerMove;
         var move = playerUnit.Monster.Moves[currentMove];
         yield return dialogBox.TypeDialog($"{playerUnit.Monster.Base.Name} used {move.Base.Name}");
+        playerUnit.PlayAttackAnimation();
         yield return new WaitForSeconds(1f);
+        enemyUnit.PlayHitAnimation();
         bool isdefeated = enemyUnit.Monster.TakeDamage(move, playerUnit.Monster);
         yield return enemyHUD.UpdateHP();
         
@@ -91,6 +93,8 @@ public class BattleSystem : MonoBehaviour
             yield return dialogBox.TypeDialog($"{enemyUnit.Monster.Base.Name} is defeated!");
 
             yield return new WaitForSeconds(2.0f);
+            enemyUnit.PlayDefeatAnimation();
+            yield return new WaitForSeconds(0.5f);
             OnBattleOver(true);
         }
         else
@@ -104,7 +108,9 @@ public class BattleSystem : MonoBehaviour
         state = BattleState.EnemyMove;
         var move = enemyUnit.Monster.GetRandomMove();
         yield return dialogBox.TypeDialog($"{enemyUnit.Monster.Base.Name} used {move.Base.Name}");
+        enemyUnit.PlayAttackAnimation();
         yield return new WaitForSeconds(1f);
+        playerUnit.PlayHitAnimation();
         bool isdefeated = playerUnit.Monster.TakeDamage(move, enemyUnit.Monster);
         yield return playerHUD.UpdateHP();
         
@@ -113,6 +119,8 @@ public class BattleSystem : MonoBehaviour
             yield return dialogBox.TypeDialog($"{playerUnit.Monster.Base.Name} is defeated!");
             
             yield return new WaitForSeconds(2.0f);
+            playerUnit.PlayDefeatAnimation();
+            yield return new WaitForSeconds(0.5f);
             OnBattleOver(false);
         }
         else
