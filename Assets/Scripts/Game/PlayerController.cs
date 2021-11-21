@@ -19,11 +19,18 @@ public class PlayerController : MonoBehaviour
 
     public event Action onEncountered;
     
+    [Header("Audio")] 
+    private AudioSource m_audioSource;
+    public AudioClip FootstepOnDirtFX;
+    public AudioClip FootstepOnGrassFX;
+    
+    
     // Start is called before the first frame update
     void Start()
     {
         m_rigidbody = GetComponent<Rigidbody2D>();
         m_animator = GetComponent<Animator>();
+        m_audioSource = GetComponent<AudioSource>();
     }
 
     // Update is called once per frame
@@ -84,8 +91,26 @@ public class PlayerController : MonoBehaviour
         
         m_animator.SetBool("isMoving",b_isMoving);
         //Debug.Log(m_animator.GetFloat("moveX") + " " + m_animator.GetFloat("moveY"));
-        
-        
+
+        if (b_isMoving)
+        {
+            if (Physics2D.OverlapBox(transform.position, transform.localScale / 2, 0.0f, EncounterArea))
+            {
+                m_audioSource.clip = FootstepOnGrassFX;
+                if(!m_audioSource.isPlaying)
+                    m_audioSource.Play();
+            }
+            else
+            {
+                m_audioSource.clip = FootstepOnDirtFX;
+                if(!m_audioSource.isPlaying)
+                    m_audioSource.Play();
+            }
+        }
+        else
+        {
+            m_audioSource.Stop();
+        }
     }
 
     private void CheckEncounterBattle()
@@ -97,6 +122,7 @@ public class PlayerController : MonoBehaviour
                 //Debug.Log("jinlaile");
                 m_rigidbody.velocity=Vector2.zero;
                 m_animator.SetBool("isMoving",false);
+                b_isMoving = false;
                 onEncountered();
             }
             else

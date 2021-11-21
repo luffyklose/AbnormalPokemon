@@ -6,7 +6,8 @@ using UnityEngine;
 public enum BattleState
 {
     Start,
-    PlayerAction,
+    PlayerActionSelection,
+    PlayerMoveSelection,
     PlayerMove,
     EnemyMove,
     Busy
@@ -36,11 +37,11 @@ public class BattleSystem : MonoBehaviour
     // Update is called once per frame
     public void HandleUpdate()
     {
-        if (state == BattleState.PlayerAction)
+        if (state == BattleState.PlayerActionSelection)
         {
             HandleActionSelection();
         }
-        else if (state == BattleState.PlayerMove)
+        else if (state == BattleState.PlayerMoveSelection)
         {
             HandleMoveSelection();
         }
@@ -64,14 +65,14 @@ public class BattleSystem : MonoBehaviour
 
     void PlayerAction()
     {
-        state = BattleState.PlayerAction;
+        state = BattleState.PlayerActionSelection;
         StartCoroutine(dialogBox.TypeDialog("Choose an action"));
         dialogBox.EnableActionSelector(true);
     }
 
     void PlayerMove()
     {
-        state = BattleState.PlayerMove;
+        state = BattleState.PlayerMoveSelection;
         dialogBox.EnableActionSelector(false);
         dialogBox.EnableDialogText(false);
         dialogBox.EnableMoveSelector(true);
@@ -170,7 +171,9 @@ public class BattleSystem : MonoBehaviour
             if (currentAction == 0)
             {
                 //Fight
+                Debug.Log("Choose Action");
                 PlayerMove();
+                dialogBox.EnableActionSelector(false);
             }
             else if (currentAction == 1)
             {
@@ -211,6 +214,7 @@ public class BattleSystem : MonoBehaviour
 
        if (Input.GetKeyDown(KeyCode.Space))
        {
+           Debug.Log("Choose Move");
            dialogBox.EnableMoveSelector(false);
            dialogBox.EnableDialogText(true);
            StartCoroutine(PerfomPlayerMove());
