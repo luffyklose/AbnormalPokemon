@@ -23,7 +23,10 @@ public class PlayerController : MonoBehaviour
     private AudioSource m_audioSource;
     public AudioClip FootstepOnDirtFX;
     public AudioClip FootstepOnGrassFX;
-    
+
+    [Header("Particle System")] 
+    public ParticleSystem FootstepPS;
+    private ParticleSystem.ColorOverLifetimeModule PSColorOverLifetime;
     
     // Start is called before the first frame update
     void Start()
@@ -31,6 +34,7 @@ public class PlayerController : MonoBehaviour
         m_rigidbody = GetComponent<Rigidbody2D>();
         m_animator = GetComponent<Animator>();
         m_audioSource = GetComponent<AudioSource>();
+        PSColorOverLifetime = FootstepPS.colorOverLifetime;
     }
 
     // Update is called once per frame
@@ -106,10 +110,14 @@ public class PlayerController : MonoBehaviour
                 if(!m_audioSource.isPlaying)
                     m_audioSource.Play();
             }
+
+            PSColorOverLifetime.color = Color.white;
         }
         else
         {
             m_audioSource.Stop();
+            FootstepPS.Stop();
+            PSColorOverLifetime.color = Color.clear;
         }
     }
 
@@ -130,5 +138,13 @@ public class PlayerController : MonoBehaviour
                 //Debug.Log("meijinlai");
             }
         }
+    }
+
+    public void PlayFootstepPS()
+    {
+        float MX = m_animator.GetFloat("MoveX");
+        float MY = m_animator.GetFloat("MoveY");
+        
+        FootstepPS.Play();
     }
 }
