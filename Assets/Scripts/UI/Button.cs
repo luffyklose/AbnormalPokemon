@@ -4,9 +4,11 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 
 public class Button : MonoBehaviour
 {
+    private GameObject FadeImage;
     // Start is called before the first frame update
     void Start()
     {
@@ -21,7 +23,16 @@ public class Button : MonoBehaviour
     
     public void GoToScene(string scene)
     {
-        UnityEngine.SceneManagement.SceneManager.LoadScene(scene, LoadSceneMode.Single);
+        GameObject[] allObjs = FindObjectsOfType<GameObject>();
+        foreach (GameObject go in allObjs)
+        {
+            if (go.name == "FadeImage")
+                FadeImage = go;
+        }
+        if(FadeImage!=null)
+            FadeImage.GetComponent<FadeImage>().StartFadeOut(scene);
+        else
+            UnityEngine.SceneManagement.SceneManager.LoadScene(scene, LoadSceneMode.Single);
     }
 
     public void Exit()

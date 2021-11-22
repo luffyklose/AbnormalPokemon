@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Random = System.Random;
 
 public enum BattleState
 {
@@ -20,6 +21,7 @@ public class BattleSystem : MonoBehaviour
     [SerializeField] private BattleUnit enemyUnit;
     [SerializeField] private BattleHUD enemyHUD;
     [SerializeField] private DialogBox dialogBox;
+    [SerializeField] private List<Monster> monsterList;
     
     private BattleState state;
     private int currentAction;
@@ -31,6 +33,8 @@ public class BattleSystem : MonoBehaviour
     // Start is called before the first frame update
     public void StartBattle()
     {
+        int temp = UnityEngine.Random.Range(0, monsterList.Count - 1);
+        enemyUnit.SetMonster(monsterList[temp].Base);
         StartCoroutine(SetupBattle());
     }
 
@@ -58,7 +62,6 @@ public class BattleSystem : MonoBehaviour
         dialogBox.SetMoveNames(playerUnit.Monster.Moves);
         
         yield return dialogBox.TypeDialog($"A wild {enemyUnit.Monster.Base.Name} appears!");
-        yield return new WaitForSeconds(1.0f);
 
         PlayerAction();
     }
@@ -82,14 +85,15 @@ public class BattleSystem : MonoBehaviour
     {
         state = BattleState.PlayerMove;
         var move = playerUnit.Monster.Moves[currentMove];
+        move.PP--;
         yield return dialogBox.TypeDialog($"{playerUnit.Monster.Base.Name} used {move.Base.Name}");
         playerUnit.PlayAttackAnimation();
-        yield return new WaitForSeconds(1f);
         enemyUnit.PlayHitAnimation();
-        bool isdefeated = enemyUnit.Monster.TakeDamage(move, playerUnit.Monster);
+        DamageDetails damageDetails = enemyUnit.Monster.TakeDamage(move, playerUnit.Monster);
         yield return enemyHUD.UpdateHP();
+        yield return ShowDamageDetails(damageDetails);
         
-        if (isdefeated)
+        if (damageDetails.Fainted)
         {
             yield return dialogBox.TypeDialog($"{enemyUnit.Monster.Base.Name} is defeated!");
 
@@ -108,14 +112,15 @@ public class BattleSystem : MonoBehaviour
     {
         state = BattleState.EnemyMove;
         var move = enemyUnit.Monster.GetRandomMove();
+        move.PP--;
         yield return dialogBox.TypeDialog($"{enemyUnit.Monster.Base.Name} used {move.Base.Name}");
         enemyUnit.PlayAttackAnimation();
-        yield return new WaitForSeconds(1f);
         playerUnit.PlayHitAnimation();
-        bool isdefeated = playerUnit.Monster.TakeDamage(move, enemyUnit.Monster);
+        DamageDetails damageDetails = playerUnit.Monster.TakeDamage(move, enemyUnit.Monster);
         yield return playerHUD.UpdateHP();
+        yield return ShowDamageDetails(damageDetails);
         
-        if (isdefeated)
+        if (damageDetails.Fainted)
         {
             yield return dialogBox.TypeDialog($"{playerUnit.Monster.Base.Name} is defeated!");
             
@@ -218,6 +223,18 @@ public class BattleSystem : MonoBehaviour
            dialogBox.EnableMoveSelector(false);
            dialogBox.EnableDialogText(true);
            StartCoroutine(PerfomPlayerMove());
+       }
+   }
+
+   IEnumerator ShowDamageDetails(DamageDetails damageDetails)
+   {
+       if (damageDetails.TypeEffectiveness > 1f)
+       {
+           yield return dialogBox.TypeDialog("It's super effective");
+       }
+       else
+       {
+           yield return dialogBox.TypeDialog("It's not effective");
        }
    }
 }

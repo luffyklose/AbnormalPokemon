@@ -43,6 +43,8 @@ public class DialogBox : MonoBehaviour
             dialogText.text += letter;
             yield return new WaitForSeconds(1f / lettersPerSecond);
         }
+
+        yield return new WaitForSeconds(1.0f);
     }
 
     public void EnableDialogText(bool enabled)

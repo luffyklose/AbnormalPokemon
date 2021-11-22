@@ -36,6 +36,11 @@ public class BattleUnit : MonoBehaviour
         
     }
 
+    public void SetMonster(MonsterBase monsterBase)
+    {
+        _base = monsterBase;
+    }
+
     public void Setup()
     {
         Monster = new Monster(_base, level);

@@ -53,11 +53,21 @@ public class Monster
         get { return Mathf.FloorToInt((Base.MaxHP * Level) / 100f) + 10; }
     }
 
-    public bool TakeDamage(Move move, Monster attacker)
+    public DamageDetails TakeDamage(Move move, Monster attacker)
     {
-        float modifiers = UnityEngine.Random.Range(0.85f, 1f);
+        float typeEffectiveness = TypeChart.GetEffectiveness(move.Base.Type, this.Base.Type1) *
+                                  TypeChart.GetEffectiveness(move.Base.Type, this.Base.Type2);
+        DamageDetails damageDetails = new DamageDetails()
+        {
+            TypeEffectiveness = typeEffectiveness,
+            Fainted = false
+        };
+        float attack = (move.Base.IsSpecial) ? attacker.SpAttack : attacker.Attack;
+        float defence = (move.Base.IsSpecial) ? SpDefence : Defence;
+        
+        float modifiers = UnityEngine.Random.Range(0.85f, 1f) * typeEffectiveness;
         float a = (2 * attacker.Level + 10) / 250f;
-        float d = a * move.Base.Power * ((float)attacker.Attack / Defence) + 2;
+        float d = a * move.Base.Power * ((float)attack / defence) + 2;
         int damage = Mathf.FloorToInt(d * modifiers);
 
         //Debug.Log(Base.Name + " HP:" + HP);
@@ -66,10 +76,11 @@ public class Monster
         if (HP <= 0)
         {
             HP = 0;
-            return true;
+            damageDetails.Fainted = true;
         }
 
-        return false;
+        damageDetails.Fainted = false;
+        return damageDetails;
     }
 
     public Move GetRandomMove()
@@ -77,4 +88,11 @@ public class Monster
         int r = UnityEngine.Random.Range(0, Moves.Count);
         return Moves[r];
     }
+}
+
+public class DamageDetails
+{
+    public bool Fainted { get; set; }
+    public float Critical{get;set; }
+    public float TypeEffectiveness{get;set; }
 }
