@@ -149,6 +149,41 @@ public class Monster
         int r = UnityEngine.Random.Range(0, Moves.Count);
         return Moves[r];
     }
+
+    public Move GetWeakMove(Monster targetMonster)
+    {
+        List<Move> tempList = new List<Move>();
+        foreach (Move move in Moves)
+        {
+            if (TypeChart.GetEffectiveness(move.Base.Type, targetMonster.Base.Type1) > 1.0f ||
+                TypeChart.GetEffectiveness(move.Base.Type, targetMonster.Base.Type2) > 1.0f)
+            {
+                tempList.Add(move);
+            }   
+        }
+
+        if (tempList.Count == 0)
+        {
+            foreach (Move move in Moves)
+            {
+                if (!(TypeChart.GetEffectiveness(move.Base.Type, targetMonster.Base.Type1) < 1.0f) ||
+                    !(TypeChart.GetEffectiveness(move.Base.Type, targetMonster.Base.Type2) < 1.0f))
+                {
+                    tempList.Add(move);
+                }
+            }
+        }
+        
+        if (tempList.Count == 0)
+        {
+            foreach (Move move in Moves)
+            {
+                tempList.Add(move);
+            }
+        }
+
+        return tempList[UnityEngine.Random.Range(0, tempList.Count - 1)];
+    }
 }
 
 public class DamageDetails

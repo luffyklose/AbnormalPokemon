@@ -112,7 +112,7 @@ public class BattleSystem : MonoBehaviour
     IEnumerator EnemyMove()
     {
         state = BattleState.PerformMove;
-        Move move = enemyUnit.Monster.GetRandomMove();
+        Move move = enemyUnit.Monster.GetWeakMove(playerUnit.Monster);
         yield return RunMove(enemyUnit, playerUnit, move);
        
         if(state==BattleState.PerformMove)
