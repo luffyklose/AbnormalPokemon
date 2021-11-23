@@ -28,6 +28,7 @@ public class BattleSystem : MonoBehaviour
     private int currentAction;
     private int currentMove;
     private int currentMember;
+    private bool isTrainerBattle = false;
     
     private MonsterParty playerParty;
     private Monster wildMonster;
@@ -125,19 +126,13 @@ public class BattleSystem : MonoBehaviour
         sourceUnit.PlayAttackAnimation();
         targetUnit.PlayHitAnimation();
         DamageDetails damageDetails = targetUnit.Monster.TakeDamage(move, sourceUnit.Monster);
-        
-        
+
         yield return targetUnit.HUD.UpdateHP();
         yield return ShowDamageDetails(damageDetails);
         
         if (damageDetails.Defeated)
         {
-            yield return dialogBox.TypeDialog($"{targetUnit.Monster.Base.Name} is defeated!");
-
-            yield return new WaitForSeconds(2.0f);
-            targetUnit.PlayDefeatAnimation();
-            yield return new WaitForSeconds(0.5f);
-            CheckForBattleOver(targetUnit);
+            yield return HandleMonsterDefeated(targetUnit);
         }
     }
 
@@ -166,14 +161,51 @@ public class BattleSystem : MonoBehaviour
         state = BattleState.BattleOver;
         OnBattleOver(isPlayerWin);
     }
-    
-    IEnumerator Escape()
+
+    IEnumerator HandleMonsterDefeated(BattleUnit defeatedUnit)
     {
-        state = BattleState.Busy;
-        Debug.Log("Paolema");
-        yield return dialogBox.TypeDialog("Run Away!");
-        OnBattleOver(true);
-        Debug.Log("Paole");
+        yield return dialogBox.TypeDialog($"{defeatedUnit.Monster.Base.Name} is defeated!");
+        defeatedUnit.PlayDefeatAnimation();
+        yield return new WaitForSeconds(2.0f);
+
+        if (!defeatedUnit.IsPlayerUnit)
+        {
+            int expYield = defeatedUnit.Monster.Base.ExpYield;
+            int enemyLevel = defeatedUnit.Monster.Level;
+            float trainerBonus = isTrainerBattle ? 1.5f : 1.0f;
+            int expGain = Mathf.FloorToInt((expYield * enemyLevel * trainerBonus) / 7);
+            //Debug.Log($"{expYield}*{enemyLevel}*{trainerBonus}");
+            //Debug.Log($"{playerUnit.Monster.Exp} + {expGain} =");
+            playerUnit.Monster.Exp += expGain;
+            //Debug.Log($"{playerUnit.Monster.Exp}");
+            yield return dialogBox.TypeDialog($"{playerUnit.Monster.Base.name} gained {expGain} exp");
+            yield return playerUnit.HUD.SetExpSmoothly();
+
+            while (playerUnit.Monster.CheckForLevelUp())
+            {
+                playerUnit.HUD.SetLevel();
+                yield return dialogBox.TypeDialog($"{playerUnit.Monster.Base.name} grew to {playerUnit.Monster.Level}");
+                LearnableMove newMove = playerUnit.Monster.GetLearnableMoveAtCurrentLevel();
+                if (newMove != null)
+                {
+                    if (playerUnit.Monster.Moves.Count < MonsterBase.MAXMOVESNUM)
+                    {
+                        playerUnit.Monster.LearnMove(newMove);
+                        yield return
+                            dialogBox.TypeDialog($"{playerUnit.Monster.Base.name} learned {newMove.Base.name}");
+                        dialogBox.SetMoveNames(playerUnit.Monster.Moves);
+                    }
+                    else
+                    {
+                        
+                    }
+                }
+                
+                yield return playerUnit.HUD.SetExpSmoothly();
+            }
+        }
+        
+        CheckForBattleOver(defeatedUnit);
     }
 
     private void OpenPartyScreen()
@@ -237,22 +269,13 @@ public class BattleSystem : MonoBehaviour
             if (currentAction == 0)
             {
                 //Fight
-                Debug.Log("Choose Action");
                 PlayerMoveSelection();
                 dialogBox.EnableActionSelector(false);
             }
             else if (currentAction == 1)
             {
                 //Win randomly
-                if (UnityEngine.Random.Range(0.0f, 1.0f) <= 0.1f)
-                {
-                    
-                    OnBattleOver(true);
-                }
-                else
-                {
-                    StartCoroutine(EnemyMove());
-                }
+                StartCoroutine(CheckStruggle());
             }
             else if (currentAction == 2)
             {
@@ -262,14 +285,7 @@ public class BattleSystem : MonoBehaviour
             else if (currentAction == 3)
             {
                 //Run
-                if (UnityEngine.Random.Range(0.0f, 1.0f) <= 0.7f)
-                {
-                    OnBattleOver(true);
-                }
-                else
-                {
-                    StartCoroutine(EnemyMove());
-                }
+                StartCoroutine(CheckEscape());
             }
         }
     }
@@ -291,7 +307,6 @@ public class BattleSystem : MonoBehaviour
 
        if (Input.GetKeyDown(KeyCode.Space))
        {
-           Debug.Log("Choose Move");
            dialogBox.EnableMoveSelector(false);
            dialogBox.EnableDialogText(true);
            StartCoroutine(PlayerMove());
@@ -364,18 +379,42 @@ public class BattleSystem : MonoBehaviour
 
    IEnumerator ShowDamageDetails(DamageDetails damageDetails)
    {
+       Debug.Log($"{damageDetails.TypeEffectiveness}");
        if (damageDetails.TypeEffectiveness > 1f)
        {
            yield return dialogBox.TypeDialog("It's super effective");
        }
-       else
+       else if (damageDetails.TypeEffectiveness < 1f)
        {
            yield return dialogBox.TypeDialog("It's not effective");
        }
    }
 
-   IEnumerator ShowMessage(string message)
+   IEnumerator CheckStruggle()
    {
-       yield return dialogBox.TypeDialog(message);
+       if (UnityEngine.Random.Range(0.0f, 1.0f) <= 0.1f)
+       {
+           yield return dialogBox.TypeDialog("Struggle Succeed");
+           BattleOver(true);
+       }
+       else
+       {
+           yield return dialogBox.TypeDialog("Struggle Failed");
+           StartCoroutine(EnemyMove());
+       }
+   }
+   
+   IEnumerator CheckEscape()
+   {
+       if (UnityEngine.Random.Range(0.0f, 1.0f) <= 0.6f)
+       {
+           yield return dialogBox.TypeDialog("Escape Succeed");
+           BattleOver(true);
+       }
+       else
+       {
+           yield return dialogBox.TypeDialog("Escape Failed");
+           StartCoroutine(EnemyMove());
+       }
    }
 }

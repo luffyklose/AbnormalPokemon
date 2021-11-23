@@ -23,6 +23,12 @@ public class MonsterBase : ScriptableObject
 
    [SerializeField] private List<LearnableMove> learnableMoves;
 
+   public static int MAXMOVESNUM { get; set; } = 4;
+
+   public int GetExpForLevel(int level)
+   {
+      return 4 * (level * level * level) / 5;
+   }
    public string Name
    {
       get { return name; }
@@ -98,10 +104,16 @@ public class MonsterBase : ScriptableObject
 public class LearnableMove
 {
    [SerializeField] private MoveBase movebase;
+   [SerializeField] private int level;
 
    public MoveBase Base
    {
       get { return movebase; }
+   }
+
+   public int Level
+   {
+      get { return level; }
    }
 }
 

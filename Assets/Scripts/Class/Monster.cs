@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using Random = Unity.Mathematics.Random;
 
@@ -30,12 +31,48 @@ public class Monster
     public void Init()
     {
         HP = MaxHP;
+        Exp = Base.GetExpForLevel(level);
 
         Moves = new List<Move>();
-        foreach (var move in Base.LearnableMoves)
+        foreach (LearnableMove move in Base.LearnableMoves)
         {
-            Moves.Add(new Move(move.Base));
+            if (move.Level <= level)
+            {
+                Moves.Add(new Move(move.Base));
+            }
+
+            if (Moves.Count >= MonsterBase.MAXMOVESNUM)
+            {
+                break;
+            }
         }
+    }
+
+    public bool CheckForLevelUp()
+    {
+        if (Exp > Base.GetExpForLevel(level + 1))
+        {
+            ++level;
+            return true;
+        }
+        else
+        {
+            return false;
+        }
+    }
+
+    public LearnableMove GetLearnableMoveAtCurrentLevel()
+    {
+        return Base.LearnableMoves.Where(x => x.Level == level).FirstOrDefault();
+    }
+
+    public void LearnMove(LearnableMove move)
+    {
+        if (Moves.Count >= MonsterBase.MAXMOVESNUM)
+        {
+            return;
+        }
+        Moves.Add(new Move(move.Base));
     }
 
     public int Attack
@@ -66,6 +103,12 @@ public class Monster
     public int MaxHP
     {
         get { return Mathf.FloorToInt((Base.MaxHP * Level) / 100f) + 10; }
+    }
+
+    public int Exp
+    {
+        get;
+        set;
     }
 
     public DamageDetails TakeDamage(Move move, Monster attacker)
