@@ -142,9 +142,6 @@ public class PlayerController : MonoBehaviour
 
     public void PlayFootstepPS()
     {
-        float MX = m_animator.GetFloat("MoveX");
-        float MY = m_animator.GetFloat("MoveY");
-        
         FootstepPS.Play();
     }
 }

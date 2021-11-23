@@ -10,6 +10,7 @@ public class BattleUnit : MonoBehaviour
     [SerializeField] private MonsterBase _base;
     [SerializeField] private int level;
     [SerializeField] private bool isPlayerUnit;
+    [SerializeField] private BattleHUD hud;
     
     public Monster Monster { get; set; }
 
@@ -17,6 +18,16 @@ public class BattleUnit : MonoBehaviour
     private Vector3 originalPos;
     private Color originalColor;
 
+    public bool IsPlayerUnit
+    {
+        get { return isPlayerUnit; }
+    }
+
+    public BattleHUD HUD
+    {
+        get { return hud; }
+    }
+    
     private void Awake()
     {
         image = GetComponent<Image>();
@@ -41,9 +52,9 @@ public class BattleUnit : MonoBehaviour
         _base = monsterBase;
     }
 
-    public void Setup()
+    public void Setup(Monster monster)
     {
-        Monster = new Monster(_base, level);
+        Monster = monster;
         if (isPlayerUnit)
         {
             image.sprite = Monster.Base.BackSprite;
@@ -52,7 +63,9 @@ public class BattleUnit : MonoBehaviour
         {
             image.sprite = Monster.Base.FrontSprite;
         }
-        
+
+        hud.SetData(monster);
+        image.color = originalColor;
         PlayerEnterAnimation();
     }
 

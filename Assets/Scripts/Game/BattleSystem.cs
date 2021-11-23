@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using UnityEditor.Experimental.GraphView;
 using UnityEngine;
 using Random = System.Random;
 
@@ -9,71 +10,87 @@ public enum BattleState
     Start,
     PlayerActionSelection,
     PlayerMoveSelection,
-    PlayerMove,
+    PerformMove,
     EnemyMove,
+    PartyScreen,
+    BattleOver,
     Busy
 }
 public class BattleSystem : MonoBehaviour
 {
 
     [SerializeField] private BattleUnit playerUnit;
-    [SerializeField] private BattleHUD playerHUD;
     [SerializeField] private BattleUnit enemyUnit;
-    [SerializeField] private BattleHUD enemyHUD;
     [SerializeField] private DialogBox dialogBox;
-    [SerializeField] private List<Monster> monsterList;
-    
+    [SerializeField] private PartyScreen partyScreen;
+
     private BattleState state;
     private int currentAction;
     private int currentMove;
+    private int currentMember;
+    
+    private MonsterParty playerParty;
+    private Monster wildMonster;
     
     //return true when enemy is defeated, return flase when player is defeated
     public event Action<bool> OnBattleOver;
     
     // Start is called before the first frame update
-    public void StartBattle()
+    public void StartBattle(MonsterParty playerParty,Monster wild)
     {
-        int temp = UnityEngine.Random.Range(0, monsterList.Count - 1);
-        enemyUnit.SetMonster(monsterList[temp].Base);
+        this.playerParty = playerParty;
+        wildMonster = wild;
         StartCoroutine(SetupBattle());
     }
 
     // Update is called once per frame
     public void HandleUpdate()
     {
-        if (state == BattleState.PlayerActionSelection)
+        switch (state)
         {
-            HandleActionSelection();
-        }
-        else if (state == BattleState.PlayerMoveSelection)
-        {
-            HandleMoveSelection();
+            case BattleState.PlayerActionSelection:
+            {
+                HandleActionSelection();
+                break;
+            }
+            case BattleState.PlayerMoveSelection:
+            {
+                HandleMoveSelection();
+                break;
+            }
+            case BattleState.PartyScreen:
+            {
+                HandlePartyScreenSelection();
+                break;
+            }
+            default: break;
         }
     }
 
     public IEnumerator SetupBattle()
     {
-        playerUnit.Setup();
-        playerHUD.SetData(playerUnit.Monster);
+        currentAction = 0;
+        currentMove = 0;
         
-        enemyUnit.Setup();
-        enemyHUD.SetData(enemyUnit.Monster);
+        playerUnit.Setup(playerParty.GetFirstHealthyMonster());
+        enemyUnit.Setup(wildMonster);
+        partyScreen.Init();
         
         dialogBox.SetMoveNames(playerUnit.Monster.Moves);
         
         yield return dialogBox.TypeDialog($"A wild {enemyUnit.Monster.Base.Name} appears!");
 
-        PlayerAction();
+        PlayerActionSelection();
     }
 
-    void PlayerAction()
+    void PlayerActionSelection()
     {
         state = BattleState.PlayerActionSelection;
-        StartCoroutine(dialogBox.TypeDialog("Choose an action"));
+        dialogBox.SetDialog("Choose an action");
         dialogBox.EnableActionSelector(true);
     }
 
-    void PlayerMove()
+    void PlayerMoveSelection()
     {
         state = BattleState.PlayerMoveSelection;
         dialogBox.EnableActionSelector(false);
@@ -81,58 +98,73 @@ public class BattleSystem : MonoBehaviour
         dialogBox.EnableMoveSelector(true);
     }
 
-    IEnumerator PerfomPlayerMove()
+    IEnumerator PlayerMove()
     {
-        state = BattleState.PlayerMove;
-        var move = playerUnit.Monster.Moves[currentMove];
+        state = BattleState.PerformMove;
+        Move move = playerUnit.Monster.Moves[currentMove];
+        yield return RunMove(playerUnit, enemyUnit, move);
+        
+        if(state==BattleState.PerformMove)
+            StartCoroutine(EnemyMove());
+    }
+
+    IEnumerator EnemyMove()
+    {
+        state = BattleState.PerformMove;
+        Move move = enemyUnit.Monster.GetRandomMove();
+        yield return RunMove(enemyUnit, playerUnit, move);
+       
+        if(state==BattleState.PerformMove)
+            PlayerActionSelection();
+    }
+
+    IEnumerator RunMove(BattleUnit sourceUnit, BattleUnit targetUnit, Move move)
+    {
         move.PP--;
-        yield return dialogBox.TypeDialog($"{playerUnit.Monster.Base.Name} used {move.Base.Name}");
-        playerUnit.PlayAttackAnimation();
-        enemyUnit.PlayHitAnimation();
-        DamageDetails damageDetails = enemyUnit.Monster.TakeDamage(move, playerUnit.Monster);
-        yield return enemyHUD.UpdateHP();
+        yield return dialogBox.TypeDialog($"{sourceUnit.Monster.Base.Name} used {move.Base.Name}");
+        sourceUnit.PlayAttackAnimation();
+        targetUnit.PlayHitAnimation();
+        DamageDetails damageDetails = targetUnit.Monster.TakeDamage(move, sourceUnit.Monster);
+        
+        
+        yield return targetUnit.HUD.UpdateHP();
         yield return ShowDamageDetails(damageDetails);
         
-        if (damageDetails.Fainted)
+        if (damageDetails.Defeated)
         {
-            yield return dialogBox.TypeDialog($"{enemyUnit.Monster.Base.Name} is defeated!");
+            yield return dialogBox.TypeDialog($"{targetUnit.Monster.Base.Name} is defeated!");
 
             yield return new WaitForSeconds(2.0f);
-            enemyUnit.PlayDefeatAnimation();
+            targetUnit.PlayDefeatAnimation();
             yield return new WaitForSeconds(0.5f);
-            OnBattleOver(true);
-        }
-        else
-        {
-            StartCoroutine(PerformEnemyMove());
+            CheckForBattleOver(targetUnit);
         }
     }
 
-    IEnumerator PerformEnemyMove()
+    void CheckForBattleOver(BattleUnit faintedUnit)
     {
-        state = BattleState.EnemyMove;
-        var move = enemyUnit.Monster.GetRandomMove();
-        move.PP--;
-        yield return dialogBox.TypeDialog($"{enemyUnit.Monster.Base.Name} used {move.Base.Name}");
-        enemyUnit.PlayAttackAnimation();
-        playerUnit.PlayHitAnimation();
-        DamageDetails damageDetails = playerUnit.Monster.TakeDamage(move, enemyUnit.Monster);
-        yield return playerHUD.UpdateHP();
-        yield return ShowDamageDetails(damageDetails);
-        
-        if (damageDetails.Fainted)
+        if (faintedUnit.IsPlayerUnit)
         {
-            yield return dialogBox.TypeDialog($"{playerUnit.Monster.Base.Name} is defeated!");
-            
-            yield return new WaitForSeconds(2.0f);
-            playerUnit.PlayDefeatAnimation();
-            yield return new WaitForSeconds(0.5f);
-            OnBattleOver(false);
+            Monster nextMonster = playerParty.GetFirstHealthyMonster();
+            if (nextMonster != null)
+            {
+                OpenPartyScreen();
+            }
+            else
+            {
+                BattleOver(false);
+            }
         }
         else
         {
-            PlayerAction();
+            BattleOver(true);
         }
+    }
+
+    void BattleOver(bool isPlayerWin)
+    {
+        state = BattleState.BattleOver;
+        OnBattleOver(isPlayerWin);
     }
     
     IEnumerator Escape()
@@ -144,28 +176,57 @@ public class BattleSystem : MonoBehaviour
         Debug.Log("Paole");
     }
 
+    private void OpenPartyScreen()
+    {
+        state = BattleState.PartyScreen;
+        partyScreen.SetPartyData(playerParty.Monsters);
+        partyScreen.gameObject.SetActive(true);
+    }
+
     void HandleActionSelection()
     {
         if (Input.GetKeyDown(KeyCode.DownArrow))
         {
-            if (currentAction < dialogBox.getActionNumber() - 1)
+            if (currentAction == 0 || currentAction == 1)
             {
-                ++currentAction;
+                currentAction += 2;
             }
             else
             {
-                currentAction = 0;
+                currentAction -= 2;
             }
         }
         else if (Input.GetKeyDown(KeyCode.UpArrow))
         {
-            if (currentAction > 0)
+            if (currentAction == 0 || currentAction == 1)
             {
-                --currentAction;
+                currentAction += 2;
             }
             else
             {
-                currentAction = dialogBox.getActionNumber() - 1;
+                currentAction -= 2;
+            }
+        }
+        else if (Input.GetKeyDown(KeyCode.LeftArrow))
+        {
+            if (currentAction == 0 || currentAction == 2)
+            {
+                currentAction += 1;
+            }
+            else
+            {
+                currentAction -= 1;
+            }
+        }
+        else if (Input.GetKeyDown(KeyCode.RightArrow))
+        {
+            if (currentAction == 0 || currentAction == 2)
+            {
+                currentAction += 1;
+            }
+            else
+            {
+                currentAction -= 1;
             }
         }
         
@@ -177,15 +238,38 @@ public class BattleSystem : MonoBehaviour
             {
                 //Fight
                 Debug.Log("Choose Action");
-                PlayerMove();
+                PlayerMoveSelection();
                 dialogBox.EnableActionSelector(false);
             }
             else if (currentAction == 1)
             {
+                //Win randomly
+                if (UnityEngine.Random.Range(0.0f, 1.0f) <= 0.1f)
+                {
+                    
+                    OnBattleOver(true);
+                }
+                else
+                {
+                    StartCoroutine(EnemyMove());
+                }
+            }
+            else if (currentAction == 2)
+            {
+                //Change monster
+                OpenPartyScreen();
+            }
+            else if (currentAction == 3)
+            {
                 //Run
-                //Debug.Log("Paolema");
-                OnBattleOver(true);
-                //Escape();
+                if (UnityEngine.Random.Range(0.0f, 1.0f) <= 0.7f)
+                {
+                    OnBattleOver(true);
+                }
+                else
+                {
+                    StartCoroutine(EnemyMove());
+                }
             }
         }
     }
@@ -193,27 +277,15 @@ public class BattleSystem : MonoBehaviour
    void HandleMoveSelection()
    {
        if (Input.GetKeyDown(KeyCode.RightArrow))
-       {
-           if (currentMove < playerUnit.Monster.Moves.Count - 1)
-           {
-               ++currentMove;
-           }
-           else
-           {
-               currentMove = 0;
-           }
-       }
+           ++currentMove;
        else if (Input.GetKeyDown(KeyCode.LeftArrow))
-       {
-           if (currentMove > 0)
-           {
-               --currentMove;
-           }
-           else
-           {
-               currentMove = playerUnit.Monster.Moves.Count - 1;
-           }
-       }
+           --currentMove;
+       else if (Input.GetKeyDown(KeyCode.DownArrow))
+           currentMove += 2;
+       else if (Input.GetKeyDown(KeyCode.UpArrow))
+           currentMove -= 2;
+
+       currentMove = Mathf.Clamp(currentMove, 0, playerUnit.Monster.Moves.Count - 1);
         
        dialogBox.UpdateMoveSelection(currentMove,playerUnit.Monster.Moves[currentMove]);
 
@@ -222,8 +294,72 @@ public class BattleSystem : MonoBehaviour
            Debug.Log("Choose Move");
            dialogBox.EnableMoveSelector(false);
            dialogBox.EnableDialogText(true);
-           StartCoroutine(PerfomPlayerMove());
+           StartCoroutine(PlayerMove());
        }
+       else if (Input.GetKeyDown(KeyCode.B))
+       {
+           dialogBox.EnableMoveSelector(false);
+           dialogBox.EnableDialogText(true);
+           PlayerActionSelection();
+       }
+   }
+
+   void HandlePartyScreenSelection()
+   {
+       if (Input.GetKeyDown(KeyCode.RightArrow))
+           ++currentMember;
+       else if (Input.GetKeyDown(KeyCode.LeftArrow))
+           --currentMember;
+       else if (Input.GetKeyDown(KeyCode.DownArrow))
+           currentMember += 2;
+       else if (Input.GetKeyDown(KeyCode.UpArrow))
+           currentMember -= 2;
+
+       currentMember = Mathf.Clamp(currentMember, 0, playerParty.Monsters.Count - 1);
+
+       partyScreen.UpdateMemberSelection(currentMember);
+
+       if (Input.GetKeyDown(KeyCode.Space))
+       {
+           Monster selectedMember = playerParty.Monsters[currentMember];
+           if (selectedMember.HP <= 0)
+           {
+               partyScreen.SetMessage("Cannot send a fainted monster");
+               return;
+           }
+
+           if (selectedMember == playerUnit.Monster)
+           {
+               partyScreen.SetMessage("Cannot switch to same monster");
+               return;
+           }
+
+           partyScreen.gameObject.SetActive(false);
+           state = BattleState.Busy;
+           StartCoroutine(SwitchMonster(selectedMember));
+
+       }
+       else if (Input.GetKeyDown(KeyCode.B))
+       {
+           partyScreen.gameObject.SetActive(false);
+           PlayerActionSelection();
+       }
+   }
+
+   IEnumerator SwitchMonster(Monster newMonster)
+   {
+       if (playerUnit.Monster.HP > 0)
+       {
+           yield return dialogBox.TypeDialog($"Come back {playerUnit.Monster.Base.name}!");
+          playerUnit.PlayDefeatAnimation();
+          yield return new WaitForSeconds(2.0f);
+       }
+       playerUnit.Setup(newMonster);
+       playerUnit.HUD.SetData(newMonster);
+       dialogBox.SetMoveNames(newMonster.Moves);
+       yield return dialogBox.TypeDialog($"Go {newMonster.Base.name}!");
+
+       StartCoroutine(EnemyMove());
    }
 
    IEnumerator ShowDamageDetails(DamageDetails damageDetails)
@@ -236,5 +372,10 @@ public class BattleSystem : MonoBehaviour
        {
            yield return dialogBox.TypeDialog("It's not effective");
        }
+   }
+
+   IEnumerator ShowMessage(string message)
+   {
+       yield return dialogBox.TypeDialog(message);
    }
 }

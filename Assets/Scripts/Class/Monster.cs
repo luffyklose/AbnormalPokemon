@@ -3,17 +3,32 @@ using System.Collections.Generic;
 using UnityEngine;
 using Random = Unity.Mathematics.Random;
 
+[System.Serializable]
 public class Monster
 {
-    public MonsterBase Base { get; set; }
-    public int Level { get; set; }
+    [SerializeField] private MonsterBase _base;
+    [SerializeField] private int level;
+
+    public MonsterBase Base
+    {
+        get
+        {
+            return _base;
+        }
+    }
+
+    public int Level
+    {
+        get
+        {
+            return level;
+        }
+    }
     public int HP { get; set; }
     public List<Move> Moves { get; set; }
 
-    public Monster(MonsterBase pbase, int plevel)
+    public void Init()
     {
-        Base = pbase;
-        Level = plevel;
         HP = MaxHP;
 
         Moves = new List<Move>();
@@ -60,7 +75,7 @@ public class Monster
         DamageDetails damageDetails = new DamageDetails()
         {
             TypeEffectiveness = typeEffectiveness,
-            Fainted = false
+            Defeated = false
         };
         float attack = (move.Base.IsSpecial) ? attacker.SpAttack : attacker.Attack;
         float defence = (move.Base.IsSpecial) ? SpDefence : Defence;
@@ -76,10 +91,13 @@ public class Monster
         if (HP <= 0)
         {
             HP = 0;
-            damageDetails.Fainted = true;
+            damageDetails.Defeated = true;
+        }
+        else
+        {
+            damageDetails.Defeated = false;
         }
 
-        damageDetails.Fainted = false;
         return damageDetails;
     }
 
@@ -92,7 +110,7 @@ public class Monster
 
 public class DamageDetails
 {
-    public bool Fainted { get; set; }
+    public bool Defeated { get; set; }
     public float Critical{get;set; }
     public float TypeEffectiveness{get;set; }
 }

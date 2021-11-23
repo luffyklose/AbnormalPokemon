@@ -40,7 +40,9 @@ public class GameController : MonoBehaviour
         state = GameState.Battle;
         battleSystem.gameObject.SetActive(true);
         worldCamera.gameObject.SetActive(false);
-        battleSystem.StartBattle();
+        MonsterParty playerParty = playerController.GetComponent<MonsterParty>();
+        Monster wildMonster = FindObjectOfType<MapArea>().GetComponent<MapArea>().GetRandomWildMonster();
+        battleSystem.StartBattle(playerParty, wildMonster);
     }
 
     void EndBattle(bool isEnemyDefeated)
