@@ -5,7 +5,8 @@ using UnityEngine;
 public enum GameState
 {
     World,
-    Battle
+    Battle,
+    Dialog
 }
 public class GameController : MonoBehaviour
 {
@@ -15,11 +16,21 @@ public class GameController : MonoBehaviour
     [SerializeField] private Camera worldCamera;
 
     private GameState state;
+    
     // Start is called before the first frame update
     void Start()
     {
         playerController.onEncountered += StartBattle;
         battleSystem.OnBattleOver += EndBattle;
+
+        DialogManager.Instance.OnShowDialog += () => { state = GameState.Dialog; };
+        DialogManager.Instance.OnCloseDialog += () =>
+        {
+            if (state == GameState.Dialog)
+            {
+                state = GameState.World;
+            }
+        };
     }
 
     // Update is called once per frame
@@ -32,6 +43,10 @@ public class GameController : MonoBehaviour
         else if (state == GameState.Battle)
         {
             battleSystem.HandleUpdate();
+        }
+        else if (state == GameState.Dialog)
+        {
+            DialogManager.Instance.HandleUpdate();
         }
     }
 

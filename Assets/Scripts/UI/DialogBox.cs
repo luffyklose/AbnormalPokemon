@@ -18,18 +18,7 @@ public class DialogBox : MonoBehaviour
     
     [SerializeField] private int lettersPerSecond;
     [SerializeField] private Color highlightColor;
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
-
+    
     public void SetDialog(string dialog)
     {
         dialogText.text = dialog;

@@ -16,6 +16,7 @@ public class PlayerController : MonoBehaviour
     public Rigidbody2D m_rigidbody;
     public Animator m_animator;
     public LayerMask EncounterArea;
+    public LayerMask interactable;
 
     public event Action onEncountered;
     
@@ -119,6 +120,11 @@ public class PlayerController : MonoBehaviour
             FootstepPS.Stop();
             PSColorOverLifetime.color = Color.clear;
         }
+
+        if (Input.GetKeyDown(KeyCode.Z))
+        {
+            Interact();
+        }
     }
 
     private void CheckEncounterBattle()
@@ -137,6 +143,21 @@ public class PlayerController : MonoBehaviour
             {
                 //Debug.Log("meijinlai");
             }
+        }
+    }
+
+    void Interact()
+    {
+        Vector3 faceDir = new Vector3(m_animator.GetFloat("moveX") * 0.25f, m_animator.GetFloat("moveY") * 0.25f);
+        Vector3 interactPos = transform.position + faceDir;
+        
+        //Debug.DrawLine(transform.position, interactPos, Color.green, 0.5f);
+
+        var collider = Physics2D.OverlapCircle(interactPos, 0.3f, interactable);
+        
+        if (collider != null)
+        {
+            collider.GetComponent<Interactable>().Interact();
         }
     }
 

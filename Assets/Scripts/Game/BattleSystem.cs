@@ -14,7 +14,8 @@ public enum BattleState
     EnemyMove,
     PartyScreen,
     BattleOver,
-    Busy
+    Busy,
+    Notbusy,
 }
 public class BattleSystem : MonoBehaviour
 {
