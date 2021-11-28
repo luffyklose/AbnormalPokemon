@@ -37,11 +37,24 @@ public class CharacterBehaviour : MonoBehaviour
 
         OnMoveOver?.Invoke();
     }
-
+    
     public void HandleUpdate()
     {
         animator.isMoving = IsMoving;
     }
+
+    public void LookAtPlayer(Vector3 targetPos)
+    {
+        var xDiff = Mathf.Floor(targetPos.x) - Mathf.Floor(transform.position.x);
+        var yDiff = Mathf.Floor(targetPos.y) - Mathf.Floor(transform.position.y);
+
+        if (xDiff == 0 || yDiff == 0)
+        {
+            animator.MoveX = Mathf.Clamp(xDiff, -1f, 1f);
+            animator.MoveY = Mathf.Clamp(yDiff, -1f, 1f);
+        }
+    }
+
     public CharacterAnimator Animator {
         get => animator;
     }

@@ -10,7 +10,10 @@ public class DialogManager : MonoBehaviour
     [SerializeField] Text dialogText;
     [SerializeField] private int lettersPerSecond;
 
+    private Action onDialogFinished;
+    
     private Dialog dialog;
+
     private int currentline = 0;
     private bool isShowing;
     private bool isInConverse;
@@ -29,13 +32,16 @@ public class DialogManager : MonoBehaviour
         Instance = this;
     }
 
-    public IEnumerator ShowDialog(Dialog dialog)
+    public IEnumerator ShowDialog(Dialog dialog, Action onFinished = null)
     {
         yield return new WaitForEndOfFrame();
         OnShowDialog.Invoke();
-
+        
         isInConverse = true;
         this.dialog = dialog;
+
+        onDialogFinished = onFinished;
+        
         dialogBox.SetActive(true);
         StartCoroutine(TypeDialog(dialog.Lines[0]));
     }
@@ -55,6 +61,7 @@ public class DialogManager : MonoBehaviour
                 currentline = 0;
                 isInConverse = false;
                 dialogBox.SetActive(false);
+                onDialogFinished.Invoke();
                 OnCloseDialog.Invoke();
             }
         }

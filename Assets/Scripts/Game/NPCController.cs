@@ -21,18 +21,22 @@ public class NPCController : MonoBehaviour, Interactable
         characterBehaviour = GetComponent<CharacterBehaviour>();
     }
 
-    public void Interact()
+    public void Interact(Transform init)
     {
-        if (state == NPCStates.Idle) 
-            StartCoroutine(DialogManager.Instance.ShowDialog(dialog));
-        //StartCoroutine(characterBehaviour.Move(new Vector2(0, 2)));
+        if (state == NPCStates.Idle)
+        {
+            state = NPCStates.Conversation;
+            characterBehaviour.LookAtPlayer(init.position);
+            
+            StartCoroutine(DialogManager.Instance.ShowDialog(dialog, () => {
+                idleTimer = 0f;
+                state = NPCStates.Idle;
+            }));
+        }
     }
 
     private void Update()
     {
-        if (DialogManager.Instance.IsInConverse)
-            return;
-
         if (state == NPCStates.Idle)
         {
             idleTimer += Time.deltaTime;
