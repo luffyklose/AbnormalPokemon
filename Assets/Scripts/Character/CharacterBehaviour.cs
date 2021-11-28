@@ -23,10 +23,7 @@ public class CharacterBehaviour : MonoBehaviour
         var targetPos = transform.position;
         targetPos.x += moveVec.x;
         targetPos.y += moveVec.y;
-
-        if (!IsWalkable(targetPos))
-            yield break;
-
+        
         IsMoving = true;
 
         while ((targetPos - transform.position).sqrMagnitude > Mathf.Epsilon)
@@ -45,17 +42,6 @@ public class CharacterBehaviour : MonoBehaviour
     {
         animator.isMoving = IsMoving;
     }
-
-    private bool IsWalkable(Vector3 targetPos)
-    {
-        if (Physics2D.OverlapCircle(targetPos, 0.2f, Layers.Instance.SolidLayer | Layers.Instance.InteractableLayer) != null)
-        {
-            return false;
-        }
-
-        return true;
-    }
-
     public CharacterAnimator Animator {
         get => animator;
     }

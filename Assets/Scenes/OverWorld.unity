@@ -19008,6 +19008,8 @@ GameObject:
   - component: {fileID: 827325124}
   - component: {fileID: 827325123}
   - component: {fileID: 827325125}
+  - component: {fileID: 827325127}
+  - component: {fileID: 827325126}
   m_Layer: 8
   m_Name: NPC
   m_TagString: Untagged
@@ -19144,6 +19146,57 @@ MonoBehaviour:
     lines:
     - 'Hi, '
     - Wanna fight?
+  movements:
+  - {x: 2, y: 0}
+  - {x: 0, y: -2}
+  - {x: -2, y: 0}
+  - {x: 0, y: 2}
+  moveInterval: 3
+--- !u!114 &827325126
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 827325120}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f859a82d757b3114d9c9601ab44277d1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  walkDownSprites:
+  - {fileID: -8922328891513336043, guid: 7f715d73be5141e41a35843d0ab6482c, type: 3}
+  - {fileID: 5527661196443274707, guid: 7f715d73be5141e41a35843d0ab6482c, type: 3}
+  - {fileID: -2495014906627460004, guid: 7f715d73be5141e41a35843d0ab6482c, type: 3}
+  - {fileID: 5610367206947713552, guid: 7f715d73be5141e41a35843d0ab6482c, type: 3}
+  walkUpSprites:
+  - {fileID: 307091595780809877, guid: 7f715d73be5141e41a35843d0ab6482c, type: 3}
+  - {fileID: -2126968859773451732, guid: 7f715d73be5141e41a35843d0ab6482c, type: 3}
+  - {fileID: -5535047699543943917, guid: 7f715d73be5141e41a35843d0ab6482c, type: 3}
+  - {fileID: -4526993761146232485, guid: 7f715d73be5141e41a35843d0ab6482c, type: 3}
+  walkRightSprites:
+  - {fileID: 2230936588577103941, guid: 7f715d73be5141e41a35843d0ab6482c, type: 3}
+  - {fileID: -9111473675286820144, guid: 7f715d73be5141e41a35843d0ab6482c, type: 3}
+  - {fileID: -5627484699997550656, guid: 7f715d73be5141e41a35843d0ab6482c, type: 3}
+  - {fileID: -5051899674784280284, guid: 7f715d73be5141e41a35843d0ab6482c, type: 3}
+  walkLeftSprites:
+  - {fileID: 4614894318121576524, guid: 7f715d73be5141e41a35843d0ab6482c, type: 3}
+  - {fileID: 7369579285134121275, guid: 7f715d73be5141e41a35843d0ab6482c, type: 3}
+  - {fileID: -1211714280344312584, guid: 7f715d73be5141e41a35843d0ab6482c, type: 3}
+  - {fileID: 6842672397523141539, guid: 7f715d73be5141e41a35843d0ab6482c, type: 3}
+--- !u!114 &827325127
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 827325120}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 66fbf8bca3cb0134e992cebd1092cbdb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  moveSpeed: 5
 --- !u!1 &829172785
 GameObject:
   m_ObjectHideFlags: 0
