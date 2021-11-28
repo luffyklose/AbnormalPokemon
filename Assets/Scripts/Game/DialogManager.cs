@@ -13,7 +13,12 @@ public class DialogManager : MonoBehaviour
     private Dialog dialog;
     private int currentline = 0;
     private bool isShowing;
-    
+    private bool isInConverse;
+    public bool IsInConverse
+    {
+        get => isInConverse;
+    }
+
     public event Action OnShowDialog;
     public event Action OnCloseDialog;
     
@@ -28,6 +33,8 @@ public class DialogManager : MonoBehaviour
     {
         yield return new WaitForEndOfFrame();
         OnShowDialog.Invoke();
+
+        isInConverse = true;
         this.dialog = dialog;
         dialogBox.SetActive(true);
         StartCoroutine(TypeDialog(dialog.Lines[0]));
@@ -46,6 +53,7 @@ public class DialogManager : MonoBehaviour
             else
             {
                 currentline = 0;
+                isInConverse = false;
                 dialogBox.SetActive(false);
                 OnCloseDialog.Invoke();
             }

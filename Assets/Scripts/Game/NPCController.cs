@@ -23,12 +23,16 @@ public class NPCController : MonoBehaviour, Interactable
 
     public void Interact()
     {
-        //StartCoroutine(DialogManager.Instance.ShowDialog(dialog));
-        StartCoroutine(characterBehaviour.Move(new Vector2(0, 2)));
+        if (state == NPCStates.Idle) 
+            StartCoroutine(DialogManager.Instance.ShowDialog(dialog));
+        //StartCoroutine(characterBehaviour.Move(new Vector2(0, 2)));
     }
 
     private void Update()
     {
+        if (DialogManager.Instance.IsInConverse)
+            return;
+
         if (state == NPCStates.Idle)
         {
             idleTimer += Time.deltaTime;
