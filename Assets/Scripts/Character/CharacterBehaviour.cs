@@ -6,9 +6,11 @@ using UnityEngine;
 public class CharacterBehaviour : MonoBehaviour
 {
     public float moveSpeed;
-
+    [SerializeField] LayerMask player;
     public bool IsMoving { get; private set; }
 
+    
+    
     CharacterAnimator animator;
     private void Awake()
     {
@@ -41,6 +43,16 @@ public class CharacterBehaviour : MonoBehaviour
     public void HandleUpdate()
     {
         animator.isMoving = IsMoving;
+    }
+
+    private bool isWalkable(Vector3 targetPos)
+    { 
+         var diff = targetPos - transform.position;
+         var dir = diff.normalized;
+        
+         if (Physics2D.BoxCast(transform.position + dir, new Vector2(0.2f, 0.2f), 0f, dir, diff.magnitude - 1, player) == true)
+             return false;
+         return true;
     }
 
     public void LookAtPlayer(Vector3 targetPos)

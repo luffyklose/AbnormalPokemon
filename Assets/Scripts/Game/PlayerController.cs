@@ -17,8 +17,10 @@ public class PlayerController : MonoBehaviour
     public Animator m_animator;
     public LayerMask EncounterArea;
     public LayerMask interactable;
+    public LayerMask DetectRange;
 
     public event Action onEncountered;
+    public event Action<Collider2D> onTrainerEncounter;
     
     [Header("Audio")] 
     private AudioSource m_audioSource;
@@ -121,10 +123,18 @@ public class PlayerController : MonoBehaviour
             PSColorOverLifetime.color = Color.clear;
         }
 
+        CheckInTrainDetectRange();
+        
         if (Input.GetKeyDown(KeyCode.Z))
         {
             Interact();
         }
+    }
+
+    private void OnMoveOver()
+    {
+        CheckEncounterBattle();
+        CheckInTrainDetectRange();
     }
 
     private void CheckEncounterBattle()
@@ -144,6 +154,19 @@ public class PlayerController : MonoBehaviour
                 //Debug.Log("meijinlai");
             }
         }
+    }
+
+    private void CheckInTrainDetectRange()
+    {
+        var collider = Physics2D.OverlapBox(transform.position, transform.localScale / 2, 0.0f, DetectRange);
+        
+        if (collider != null)
+        {
+            m_rigidbody.velocity=Vector2.zero;
+            m_animator.SetBool("isMoving",false);
+            b_isMoving = false;
+            onTrainerEncounter.Invoke(collider);
+        } 
     }
 
     void Interact()

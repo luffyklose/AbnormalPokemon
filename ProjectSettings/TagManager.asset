@@ -14,8 +14,8 @@ TagManager:
   - EncounterArea
   - SolidObjects
   - Interactable
-  - 
-  - 
+  - DetectRange
+  - Player
   - 
   - 
   - 

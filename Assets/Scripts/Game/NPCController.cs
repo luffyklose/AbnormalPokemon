@@ -7,7 +7,6 @@ public class NPCController : MonoBehaviour, Interactable
 {
     [SerializeField] private Dialog dialog;
     [SerializeField] private List<Vector2> movements;
-
     [SerializeField] private float moveInterval;
     
     private NPCStates state;
@@ -37,10 +36,12 @@ public class NPCController : MonoBehaviour, Interactable
 
     private void Update()
     {
+        if (DialogManager.Instance.IsInConverse) return;
+
         if (state == NPCStates.Idle)
         {
             idleTimer += Time.deltaTime;
-            if (idleTimer >= moveInterval)
+            if (idleTimer > moveInterval)
             {
                 idleTimer = 0f;
                 if (movements.Count > 0)
@@ -54,8 +55,12 @@ public class NPCController : MonoBehaviour, Interactable
     {
         state = NPCStates.Walking;
 
+        var prePos = transform.position;
+
         yield return characterBehaviour.Move(movements[currentMove]);
-        currentMove = (currentMove + 1) % movements.Count;
+        
+        if (transform.position != prePos)
+            currentMove = (currentMove + 1) % movements.Count;
         
         state = NPCStates.Idle;
     }
