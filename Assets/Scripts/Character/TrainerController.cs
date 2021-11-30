@@ -7,6 +7,18 @@ public class TrainerController : MonoBehaviour
 {
     [SerializeField] Dialog dialog;
     [SerializeField] GameObject DetectRange;
+    [SerializeField] string name;
+    [SerializeField] Sprite sprite;
+
+    public Sprite Sprite
+    {
+        get => sprite;
+    }
+
+    public string Name
+    {
+        get => name;
+    }
 
     CharacterBehaviour character;
     private void Awake()
@@ -27,7 +39,10 @@ public class TrainerController : MonoBehaviour
 
         yield return character.Move(moveVec);
         
-        StartCoroutine(DialogManager.Instance.ShowDialog(dialog));
+        StartCoroutine(DialogManager.Instance.ShowDialog(dialog, () =>
+        {
+            GameController.Instance.StartTrainerBattle(this);
+        }));
     }
 
     public void SetTrainerRotation(FacingDirection dir)
@@ -41,5 +56,20 @@ public class TrainerController : MonoBehaviour
             dirAngle = 270f;
 
         DetectRange.transform.eulerAngles = new Vector3(0f, 0f, dirAngle);
+    }
+    
+    // public void Interact(Transform transform)
+    // {
+    //     character.LookAtPlayer(transform.position);
+    //     
+    //     StartCoroutine(DialogManager.Instance.ShowDialog(dialog, () =>
+    //     {
+    //         GameController.Instance.StartTrainerBattle(this);
+    //     }));
+    // }
+
+    public void BattleLost()
+    {
+        DetectRange.gameObject.SetActive(false);
     }
 }

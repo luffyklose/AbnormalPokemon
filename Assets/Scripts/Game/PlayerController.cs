@@ -9,7 +9,19 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private float m_moveSpeed;
     [SerializeField] private float checkInterval;
     [SerializeField] private float BattleProbablity;
+    [SerializeField] string name;
+    [SerializeField] Sprite sprite;
 
+    public Sprite Sprite
+    {
+        get => sprite;
+    }
+
+    public string Name
+    {
+        get => name;
+    }
+    
     private bool b_isMoving;
     private float counter;
 
@@ -165,6 +177,9 @@ public class PlayerController : MonoBehaviour
             m_rigidbody.velocity=Vector2.zero;
             m_animator.SetBool("isMoving",false);
             b_isMoving = false;
+            m_audioSource.Stop();
+            FootstepPS.Stop();
+            PSColorOverLifetime.color = Color.clear;
             onTrainerEncounter.Invoke(collider);
         } 
     }
@@ -173,8 +188,6 @@ public class PlayerController : MonoBehaviour
     {
         Vector3 faceDir = new Vector3(m_animator.GetFloat("moveX") * 0.25f, m_animator.GetFloat("moveY") * 0.25f);
         Vector3 interactPos = transform.position + faceDir;
-        
-        //Debug.DrawLine(transform.position, interactPos, Color.green, 0.5f);
 
         var collider = Physics2D.OverlapCircle(interactPos, 0.3f, interactable);
         
@@ -182,6 +195,8 @@ public class PlayerController : MonoBehaviour
         {
             collider.GetComponent<Interactable>().Interact(transform);
         }
+        
+        Debug.Log("interact");
     }
 
     public void PlayFootstepPS()

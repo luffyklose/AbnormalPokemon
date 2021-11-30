@@ -35,18 +35,6 @@ public class BattleUnit : MonoBehaviour
         originalColor = image.color;
     }
 
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
-
     public void SetMonster(MonsterBase monsterBase)
     {
         _base = monsterBase;
@@ -64,9 +52,15 @@ public class BattleUnit : MonoBehaviour
             image.sprite = Monster.Base.FrontSprite;
         }
 
+        hud.gameObject.SetActive(true);
         hud.SetData(monster);
         image.color = originalColor;
         PlayerEnterAnimation();
+    }
+
+    public void DisableHUD()
+    {
+        hud.gameObject.SetActive(false);  
     }
 
     public void PlayerEnterAnimation()
