@@ -14,7 +14,15 @@ public class MonsterParty : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        foreach (var monster in monsters)
+        if (monsters.Count > 6)
+        {
+            for (int i = 6; i < monsters.Count; i++)
+            {
+                monsters.Remove(monsters[i]);
+            }
+        }
+        
+        foreach (Monster monster in monsters)
         {
             monster.Init();
         }

@@ -213,7 +213,7 @@ public class BattleSystem : MonoBehaviour
                 var trainerPokemon = trainerParty.GetFirstHealthyMonster();
                 if (trainerPokemon != null)
                 {
-                    //SendNextPokemon(trainerPokemon);
+                    StartCoroutine(SendNextPokemon(trainerPokemon));
                 }
                 else 
                     BattleOver(true);
@@ -262,7 +262,7 @@ public class BattleSystem : MonoBehaviour
                     }
                     else
                     {
-                        
+                        //forget old moves and learn new moves
                     }
                 }
                 
@@ -442,18 +442,20 @@ public class BattleSystem : MonoBehaviour
        StartCoroutine(EnemyMove());
    }
 
-   IEnumerator SendNextPokemon(Monster nextPokemon) // sending out next Pokemon when the current one is fainted
+   // sending out next Pokemon when the current one is fainted
+   IEnumerator SendNextPokemon(Monster nextPokemon) 
    {
        state = BattleState.Busy;
        
        enemyUnit.Setup(nextPokemon);
        yield return dialogBox.TypeDialog($"{trainer.Name} sends out {nextPokemon.Base.Name}!");
-       //state = BattleState.
+       
+       PlayerActionSelection();
    }
 
    IEnumerator ShowDamageDetails(DamageDetails damageDetails)
    {
-       Debug.Log($"{damageDetails.TypeEffectiveness}");
+       //Debug.Log($"{damageDetails.TypeEffectiveness}");
        if (damageDetails.TypeEffectiveness > 1f)
        {
            yield return dialogBox.TypeDialog("It's super effective");

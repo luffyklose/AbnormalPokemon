@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   name: Water Pulse
   description: 
-  type: 4
+  type: 3
   power: 60
   accuracy: 100
   pp: 20

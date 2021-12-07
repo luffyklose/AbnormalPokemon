@@ -16,7 +16,7 @@ MonoBehaviour:
   description: good at bibi
   frontSprite: {fileID: 21300000, guid: c3544fcba9b6a654da8538b686fea377, type: 3}
   backSprite: {fileID: 21300000, guid: b7ccf5dde61c76b4f92cf22cbdc740ce, type: 3}
-  type1: 6
+  type1: 10
   type2: 0
   maxHP: 40
   attack: 45
@@ -24,4 +24,9 @@ MonoBehaviour:
   spAttack: 35
   spDefence: 35
   speed: 56
-  learnableMoves: []
+  expYield: 55
+  learnableMoves:
+  - movebase: {fileID: 11400000, guid: accd32c6b38ed9a4087802bd817742d0, type: 2}
+    level: 1
+  - movebase: {fileID: 11400000, guid: bf27092b2e4b36d4a9391c3bf2966958, type: 2}
+    level: 9

@@ -16,7 +16,7 @@ MonoBehaviour:
   description: Yellow eletric rat
   frontSprite: {fileID: 21300000, guid: ac4c08e3f91fda648b667b50b4c1d716, type: 3}
   backSprite: {fileID: 21300000, guid: 208675d8ffa26dd47a339b18bbf92a82, type: 3}
-  type1: 13
+  type1: 4
   type2: 0
   maxHP: 35
   attack: 55
@@ -29,4 +29,6 @@ MonoBehaviour:
   - movebase: {fileID: 11400000, guid: d5f8752b5b3cc3c42830c005c9ba2a75, type: 2}
     level: 1
   - movebase: {fileID: 11400000, guid: eb2d8e28413b4604e9fcd82e15d165ff, type: 2}
+    level: 1
+  - movebase: {fileID: 11400000, guid: a63504fea68e42b408786c8bdab12eae, type: 2}
     level: 1

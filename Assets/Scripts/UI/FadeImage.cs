@@ -15,7 +15,8 @@ public class FadeImage : MonoBehaviour
         image = GetComponent<Image>();
         if (image == null)
             Debug.Log("no image");
-        StartCoroutine(FadeIn());
+        else
+            StartCoroutine(FadeIn());
         //Debug.Log("Fade Image Start");
     }
 

@@ -20,6 +20,7 @@ public class MapArea : MonoBehaviour
 
     public Monster GetRandomWildMonster()
     {
+        Debug.Log(wildMonsters.Count);
         Monster wild= wildMonsters[UnityEngine.Random.Range(0, wildMonsters.Count - 1)];
         wild.Init();
         return wild;

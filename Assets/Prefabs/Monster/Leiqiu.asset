@@ -16,7 +16,7 @@ MonoBehaviour:
   description: Big yellow electric rat
   frontSprite: {fileID: 21300000, guid: 27d0431df0a1bb14f88e83b6e3b02132, type: 3}
   backSprite: {fileID: 21300000, guid: 998f66275ae262d4994a189f4978a59c, type: 3}
-  type1: 13
+  type1: 4
   type2: 0
   maxHP: 60
   attack: 90
@@ -24,4 +24,9 @@ MonoBehaviour:
   spAttack: 90
   spDefence: 80
   speed: 100
-  learnableMoves: []
+  expYield: 122
+  learnableMoves:
+  - movebase: {fileID: 11400000, guid: d5f8752b5b3cc3c42830c005c9ba2a75, type: 2}
+    level: 1
+  - movebase: {fileID: 11400000, guid: eb2d8e28413b4604e9fcd82e15d165ff, type: 2}
+    level: 1

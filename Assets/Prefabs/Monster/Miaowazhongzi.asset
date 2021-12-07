@@ -14,10 +14,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   name: Miaowa Torrent
   description: Miaowazhongzi
-  frontSprite: {fileID: 21300000, guid: aacaae602a38f884ab9e02e43de3736d, type: 3}
+  frontSprite: {fileID: 21300000, guid: 0f37bf3cf5680a64d863b5f155b2a597, type: 3}
   backSprite: {fileID: 21300000, guid: 0f37bf3cf5680a64d863b5f155b2a597, type: 3}
-  type1: 3
-  type2: 0
+  type1: 5
+  type2: 8
   maxHP: 45
   attack: 49
   defence: 49
@@ -25,4 +25,10 @@ MonoBehaviour:
   spDefence: 65
   speed: 45
   expYield: 64
-  learnableMoves: []
+  learnableMoves:
+  - movebase: {fileID: 11400000, guid: 61847c2b30dce214c973327433f5d357, type: 2}
+    level: 1
+  - movebase: {fileID: 11400000, guid: accd32c6b38ed9a4087802bd817742d0, type: 2}
+    level: 1
+  - movebase: {fileID: 11400000, guid: ac1f3df6c2bb39a418f06df9d4e2f100, type: 2}
+    level: 3
