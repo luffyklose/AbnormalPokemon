@@ -107,5 +107,9 @@ public class GameController : MonoBehaviour
         state = GameState.World;
         battleSystem.gameObject.SetActive(false);
         worldCamera.gameObject.SetActive(true);
+        if (!isEnemyDefeated)
+        {
+            FindObjectOfType<GameMenu>().Load();
+        }
     }
 }
