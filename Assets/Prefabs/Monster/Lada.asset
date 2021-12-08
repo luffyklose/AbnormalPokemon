@@ -1,0 +1,34 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ca80ce0551caa7148b094909a6671d32, type: 3}
+  m_Name: Lada
+  m_EditorClassIdentifier: 
+  name: Lada
+  description: 'Big rat
+
+'
+  frontSprite: {fileID: 21300000, guid: 7502c18ebf1bf6b4586f67d313560948, type: 3}
+  backSprite: {fileID: 21300000, guid: 1f7b4ffc3f3facf48be3f88123557018, type: 3}
+  type1: 1
+  type2: 0
+  maxHP: 55
+  attack: 81
+  defence: 60
+  spAttack: 50
+  spDefence: 70
+  speed: 97
+  expYield: 116
+  learnableMoves:
+  - movebase: {fileID: 11400000, guid: 61847c2b30dce214c973327433f5d357, type: 2}
+    level: 1
+  - movebase: {fileID: 11400000, guid: a63504fea68e42b408786c8bdab12eae, type: 2}
+    level: 1
