@@ -1,8 +1,6 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using Microsoft.Unity.VisualStudio.Editor;
-using UnityEditor.Experimental.GraphView;
 using UnityEngine;
 using UnityEngine.UI;
 using Image = UnityEngine.UI.Image;
@@ -49,6 +47,10 @@ public class BattleSystem : MonoBehaviour
     // Start is called before the first frame update
     public void StartBattle(MonsterParty playerParty,Monster wild)
     {
+        currentAction = 0;
+        currentMove = 0;
+        currentMember = 0;
+        
         this.playerParty = playerParty;
         wildMonster = wild;
         StartCoroutine(SetupBattle());
@@ -63,6 +65,10 @@ public class BattleSystem : MonoBehaviour
 
         player = playerParty.GetComponent<PlayerController>();
         trainer = trainerParty.GetComponent<TrainerController>();
+        
+        currentAction = 0;
+        currentMove = 0;
+        currentMember = 0;
         
         StartCoroutine(SetupBattle());
     }
@@ -475,7 +481,9 @@ public class BattleSystem : MonoBehaviour
        }
        else
        {
+           state = BattleState.Busy;
            yield return dialogBox.TypeDialog("Struggle Failed");
+           dialogBox.EnableActionSelector(false);
            StartCoroutine(EnemyMove());
        }
    }
@@ -489,7 +497,9 @@ public class BattleSystem : MonoBehaviour
        }
        else
        {
+           state = BattleState.Busy;
            yield return dialogBox.TypeDialog("Escape Failed");
+           dialogBox.EnableActionSelector(false);
            StartCoroutine(EnemyMove());
        }
    }
