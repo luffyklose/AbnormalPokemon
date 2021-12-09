@@ -137,7 +137,7 @@ public class PlayerController : MonoBehaviour
 
         CheckInTrainDetectRange();
         
-        if (Input.GetKeyDown(KeyCode.Z))
+        if (Input.GetKeyDown(KeyCode.Space))
         {
             Interact();
         }
@@ -196,7 +196,7 @@ public class PlayerController : MonoBehaviour
             collider.GetComponent<Interactable>().Interact(transform);
         }
         
-        Debug.Log("interact");
+        //Debug.Log("interact");
     }
 
     public void PlayFootstepPS()

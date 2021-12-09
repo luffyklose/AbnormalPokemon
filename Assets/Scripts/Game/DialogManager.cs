@@ -48,7 +48,7 @@ public class DialogManager : MonoBehaviour
 
     public void HandleUpdate()
     {
-        if (Input.GetKeyDown(KeyCode.Z) && !isShowing)
+        if (Input.GetKeyDown(KeyCode.Space) && !isShowing)
         {
             ++currentline;
 
