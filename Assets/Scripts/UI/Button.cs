@@ -37,8 +37,8 @@ public class Button : MonoBehaviour
 
     public void Exit()
     {
-        //Application.Quit(); 
-        UnityEditor.EditorApplication.isPlaying = false;
+        Application.Quit(); 
+        //UnityEditor.EditorApplication.isPlaying = false;
     }
     
     public void OnPointerEnter(PointerEventData eventData)
