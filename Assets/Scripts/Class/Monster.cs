@@ -10,6 +10,10 @@ public class Monster
     [SerializeField] private MonsterBase _base;
     [SerializeField] private int level;
 
+    public int HP { get; set; }
+    public List<Move> Moves { get; set; }
+    public Dictionary<Stat,int> Stats { get; private set; }
+
     public MonsterBase Base
     {
         get
@@ -25,14 +29,9 @@ public class Monster
             return level;
         }
     }
-    public int HP { get; set; }
-    public List<Move> Moves { get; set; }
 
     public void Init()
     {
-        HP = MaxHP;
-        Exp = Base.GetExpForLevel(level);
-
         Moves = new List<Move>();
         foreach (LearnableMove move in Base.LearnableMoves)
         {
@@ -46,6 +45,28 @@ public class Monster
                 break;
             }
         }
+        
+        CalculateStats();
+        HP = MaxHP;
+        Exp = Base.GetExpForLevel(level);
+    }
+
+    void CalculateStats()
+    {
+        Stats = new Dictionary<Stat, int>();
+        Stats.Add(Stat.Attack,Mathf.FloorToInt((Base.Attack * Level) / 100f) + 5);
+        Stats.Add(Stat.Defence,Mathf.FloorToInt((Base.Defence * Level) / 100f) + 5);
+        Stats.Add(Stat.SpAttack,Mathf.FloorToInt((Base.SpAttack * Level) / 100f) + 5);
+        Stats.Add(Stat.SpDefence,Mathf.FloorToInt((Base.SpDefence * Level) / 100f) + 5);
+        Stats.Add(Stat.Speed,Mathf.FloorToInt((Base.Speed * Level) / 100f) + 5);
+
+        MaxHP = Mathf.FloorToInt((Base.MaxHP * Level) / 100f) + 10;
+    }
+
+    int GetStat(Stat stat)
+    {
+        int statVal = Stats[stat];
+        return statVal;
     }
 
     public bool CheckForLevelUp()
@@ -77,32 +98,33 @@ public class Monster
 
     public int Attack
     {
-        get { return Mathf.FloorToInt((Base.Attack * Level) / 100f) + 5; }
+        get { return GetStat(Stat.Attack); }
     }
     
     public int Defence
     {
-        get { return Mathf.FloorToInt((Base.Defence * Level) / 100f) + 5; }
+        get { return GetStat(Stat.Defence); }
     }
     
     public int SpAttack
     {
-        get { return Mathf.FloorToInt((Base.SpAttack * Level) / 100f) + 5; }
+        get { return GetStat(Stat.SpAttack); }
     }
     
     public int SpDefence
     {
-        get { return Mathf.FloorToInt((Base.SpDefence * Level) / 100f) + 5; }
+        get { return GetStat(Stat.SpDefence); }
     }
     
     public int Speed
     {
-        get { return Mathf.FloorToInt((Base.Speed * Level) / 100f) + 5; }
+        get { return GetStat(Stat.Speed); }
     }
     
     public int MaxHP
     {
-        get { return Mathf.FloorToInt((Base.MaxHP * Level) / 100f) + 10; }
+        get;
+        private set;
     }
 
     public int Exp

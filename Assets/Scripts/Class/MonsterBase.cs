@@ -117,6 +117,15 @@ public class LearnableMove
    }
 }
 
+public enum Stat
+{
+   Attack,
+   Defence,
+   SpAttack,
+   SpDefence,
+   Speed
+}
+
 public enum MonsterType
 {
    None,

@@ -50,6 +50,7 @@ public class BattleSystem : MonoBehaviour
         currentAction = 0;
         currentMove = 0;
         currentMember = 0;
+        isTrainerBattle = false;
         
         this.playerParty = playerParty;
         wildMonster = wild;
